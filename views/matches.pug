@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  if (redTeamName !== 'Red')
+    h1 Match #{matchId}
+    div
+      h2 #{redTeamName} and #{greenTeamName}
+      p Score #{score}
+  else
+    h3 Not a match

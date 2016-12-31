@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  table.w3-table.w3-centered.w3-striped
+    thead
+      tr.w3-light-grey
+        th Round 1
+        th Round 2
+        th Round 3
+        th Round 4
+        th Round 5
+        th Round 6
+    mixin columns
+      td
+        table.w3-table.w3-card.w3-hover-shadow
+          tr.w3-white
+            td Green
+            td 0
+            td.w3-green I
+          tr.w3-light-grey
+            td Red
+            td 0
+            td.w3-red I
+    -for (var i=1; i<=6; ++i) {
+      tr
+        -for (var j=1; j<=6; ++j) {
+          +columns
+        -}
+    -}

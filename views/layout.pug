@@ -1,0 +1,69 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='http://www.w3schools.com/lib/w3.css')
+
+    nav#ybotsidebar.w3-sidenav.w3-white.w3-card-2(style='display:none')
+      a.w3-closenav.w3-large(href='javascript:void(0)', onclick='sidebar_close()') Menu
+        span.w3-right ×
+
+      mixin tournLinks(name, display)
+        if (String(url).includes(name))
+          a.w3-teal.w3-hover-opacity(href='/' + name)= display
+        else
+          a.w3-hover-light-grey(href='/' + name)= display
+
+      +tournLinks('competition1', '1st Competition')
+      +tournLinks('competition2', '2nd Competition')
+      +tournLinks('competition3', '3rd Competition')
+      +tournLinks('championship', 'Championship')
+      +tournLinks('practice', 'Practice')
+      +tournLinks('field-testing', 'Field Testing')
+
+    header.w3-container.w3-dark-grey
+      h2
+        span#opennavbtn.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
+        | &#32;&#32;
+        span#titlebar My Header
+
+    //-div.w3-top
+      ul.w3-navbar.w3-theme.w3-top.w3-left-align.w3-large
+        li
+          a.w3-theme-l1(href='/') Youthbot
+
+        mixin tournLinks(name, display)
+          li
+            if (String(url).includes(name))
+              a.w3-teal.w3-hover-light-grey(href='/' + name)= display
+            else
+              a.w3-hover-light-grey(href='/' + name)= display
+
+        +tournLinks('competition1', '1st Competition')
+        +tournLinks('competition2', '2nd Competition')
+        +tournLinks('competition3', '3rd Competition')
+        +tournLinks('championship', 'Championship')
+        +tournLinks('practice', 'Practice')
+        +tournLinks('field-testing', 'Field Testing')
+
+  body
+    #main.w3-content(style='max-width:1300px; margin-top:11px')
+      block content
+
+  script.
+    function sidebar_open() {
+        document.getElementById('main').style.marginLeft = '25%';
+        document.getElementById('titlebar').style.marginLeft = '25%';
+        document.getElementById('ybotsidebar').style.width = '25%';
+        document.getElementById('ybotsidebar').style.display = 'block';
+        document.getElementById('opennavbtn').style.display = 'none';
+      }
+      function sidebar_close() {
+        document.getElementById("main").class = 'w3-content';
+        document.getElementById("main").style = 'max-width:1300px; margin-top:11px';
+        document.getElementById('titlebar').style.marginLeft = '0%';
+        document.getElementById("ybotsidebar").style.display = 'none';
+        document.getElementById("opennavbtn").style.display = 'inline-block';
+      }
