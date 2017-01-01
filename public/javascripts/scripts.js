@@ -1,7 +1,7 @@
 function sidebar_open() {
   document.getElementById('main').style.marginLeft = '230px';
   document.getElementById('header').style.zIndex = 'auto';
-  document.getElementById('header_title').style.marginLeft = '200px';
+  document.getElementById('header_title').style.marginLeft = '175px';
   document.getElementById('side_nav').style.width = '220px';
   document.getElementById('side_nav').style.display = 'block';
 }

@@ -1,48 +1,56 @@
 extends layout
 
+block links
+  li
+    a.w3-large(href='#standings') Standings
+
 block content
-  mixin columns(intermatch, round)
-    td
-      -var matchId = 6 * (round - 1) + intermatch
-      a.ybot-no-decoration(href='/competition1/' + matchId)
-        table.w3-table.w3-card.w3-hover-shadow
-          tr.w3-white
-            td.w3-text-green Green
-            td 0
-            td I
-          tr.ybot-theme-secb
-            td.w3-text-red Red
-            td 0
-            td I
+  div
+    mixin columns(intermatch, round)
+      td
+        -var matchId = 6 * (round - 1) + intermatch
+        a.ybot-no-decoration(href='/competition1/' + matchId)
+          table.w3-table.w3-card.w3-hover-shadow
+            tr.w3-white
+              td.w3-text-green Green
+              td 0
+              td I
+            tr.ybot-theme-secb
+              td.w3-text-red Red
+              td 0
+              td I
 
-  table.w3-table.w3-centered.w3-bordered
-    thead
-      tr.ybot-theme-seca
-        th Round 1
-        th Round 2
-        th Round 3
-        th Round 4
-        th Round 5
-        th Round 6
+    table.w3-table.w3-centered.w3-bordered
+      thead
+        tr.ybot-theme-seca
+          th Round 1
+          th Round 2
+          th Round 3
+          th Round 4
+          th Round 5
+          th Round 6
 
-    -for (var intermatch=1; intermatch<=6; ++intermatch) {
-      tr
-        -for (var round=1; round<=6; ++round) {
-          +columns(intermatch, round)
-        -}
-    -}
+      -for (var intermatch=1; intermatch<=6; ++intermatch) {
+        tr
+          -for (var round=1; round<=6; ++round) {
+            +columns(intermatch, round)
+          -}
+      -}
 
-    thead
-      tr.ybot-theme-seca
-        th Round 7
-        th Round 8
-        th Round 9
-        th Round 10
-        th Round 11
+      thead
+        tr.ybot-theme-seca
+          th Round 7
+          th Round 8
+          th Round 9
+          th Round 10
+          th Round 11
 
-    -for (var intermatch=1; intermatch<=6; ++intermatch) {
-      tr
-        -for (var round=7; round<=11; ++round) {
-          +columns(intermatch, round)
-        -}
-    -}
+      -for (var intermatch=1; intermatch<=6; ++intermatch) {
+        tr
+          -for (var round=7; round<=11; ++round) {
+            +columns(intermatch, round)
+          -}
+      -}
+
+    #standings.ybot-anchor
+    div
