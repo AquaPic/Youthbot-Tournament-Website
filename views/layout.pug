@@ -1,24 +1,29 @@
 doctype html
 html
   head
-    title YouthBOT Tournament View
+    title YouthBOT Tournaments
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='http://www.w3schools.com/lib/w3.css')
 
   body
-    nav#sidebar.w3-sidenav.w3-light-grey.w3-card-4.w3-animate-left(style='display:none;')
-      header.w3-container.w3-dark-grey
+    -var active = 'Standings'
+
+    nav#sidebar.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display:none;')
+      div.w3-container.ybot-theme-seca
         h5
-          | Menu
-          a.w3-right.w3-large.w3-closenav(href='javascript:void(0)', onclick='sidebar_close()' style='padding: 0;') x
+          span
+            a.w3-hover-opacity(href='/' style='padding: 0; display: inline;') Standings
+          span.w3-right
+            a.w3-large.w3-hover-opacity(href='javascript:void(0)', onclick='sidebar_close()' style='padding: 0;') x
 
       mixin tournLinks(name, display)
         if (String(url).includes(name))
-          a.w3-teal.w3-hover-opacity(href='/' + name)= display
+          -active = display
+          a.w3-teal.ybot-theme-hover-secc(href='/' + name)= display
         else
-          a.w3-hover-grey(href='/' + name)= display
+          a.ybot-theme-hover-secc(href='/' + name)= display
 
       +tournLinks('competition1', '1st Competition')
       +tournLinks('competition2', '2nd Competition')
@@ -27,26 +32,13 @@ html
       +tournLinks('practice', 'Practice')
       +tournLinks('field-testing', 'Field Testing')
 
-    header.w3-container.w3-dark-grey
+    header.w3-container.ybot-theme-pri
       h2
-        span#opennavbtn.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
+        a#opennavbtn.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
         | &#32;&#32;
-        span#titlebar.ybot-animate(style='margin-left:0px;') My Header
+        span#titlebar.ybot-animate(style='margin-left:0px;')= active
 
     #main.w3-container(style='margin-top:11px; margin-left:40px; margin-right:40px;')
       block content
 
-  script.
-    function sidebar_open() {
-        document.getElementById('main').style.marginLeft = '230px';
-        document.getElementById('titlebar').style.marginLeft = '220px';
-        document.getElementById('sidebar').style.width = '220px';
-        document.getElementById('sidebar').style.display = 'block';
-        document.getElementById('opennavbtn').style.display = 'none';
-      }
-      function sidebar_close() {
-        document.getElementById('main').style.marginLeft = '40px';
-        document.getElementById('titlebar').style.marginLeft = '0';
-        document.getElementById("sidebar").style.display = 'none';
-        document.getElementById("opennavbtn").style.display = 'inline-block';
-      }
+  script(src='/javascripts/scripts.js')
