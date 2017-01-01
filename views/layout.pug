@@ -9,17 +9,19 @@ html
 
   body
     -var active = 'Standings'
+    -var baseurl ='/'
 
     nav#side_nav.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display:none;')
       div.w3-container.ybot-theme-pri
         h5
           span
             a.ybot-theme-hover-pri(href='/' style='padding: 0; display: inline;') Standings
-          span.w3-right.w3-large.w3-closenav(href='javascript:void(0)', onclick='sidebar_close()') x
+          span.w3-right.w3-large.w3-closenav(href='javascript:void(0)', onclick='sidebar_close()') X
 
       mixin tournLinks(name, display)
         if (String(url).includes(name))
           -active = display
+          -baseurl = '/' + name
           a.ybot-theme-secc.w3-hover-shadow(href='/' + name)= display
         else
           a.w3-hover-shadow(href='/' + name)= display
@@ -33,9 +35,9 @@ html
 
     header.w3-container.ybot-theme-pri
       h2
-        a#open_nav.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
+        span#open_nav.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
         | &#32;&#32;
-        span#titlebar.ybot-animate(style='margin-left:0px;')= active
+        a#titlebar.ybot-animate.ybot-no-decoration(style='margin-left:0px;' href=baseurl)= active
 
     #main.w3-container(style='margin-top:11px; margin-left:40px; margin-right:40px;')
       block content

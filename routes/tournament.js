@@ -58,7 +58,7 @@ router.get('/:matchId', function(req, res, next) {
     next(err);
   }
 
-  /*db.get(function(err) {
+  db.get(function(err) {
     if (err)
       next(err)
   }).query(
@@ -88,15 +88,7 @@ router.get('/:matchId', function(req, res, next) {
         score: score
       })
     }
-  )*/
-
-  res.render('matches', {
-    url: req.originalUrl,
-    matchId: req.params.matchId,
-    redTeamName: 'Red',
-    greenTeamName: 'Green',
-    score: 0
-  })
+  )
 })
 
 module.exports = router

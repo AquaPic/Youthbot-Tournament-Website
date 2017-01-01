@@ -27,3 +27,7 @@
   color: #000 !important;
   background-color: #A7B3A5 !important;
 }
+
+.ybot-no-decoration {
+  text-decoration: none !important;
+}

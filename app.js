@@ -49,13 +49,11 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-/*
 db.connect(function(err) {
   if(err)
     next(err)
 
   console.log('Successfully connected to SQL server')
 })
-*/
 
 module.exports = app;

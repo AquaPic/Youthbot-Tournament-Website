@@ -4,7 +4,7 @@ block content
   mixin columns(intermatch, round)
     td
       -var matchId = 6 * (round - 1) + intermatch
-      a(href='/competition1/' + matchId style='text-decoration: none;')
+      a.ybot-no-decoration(href='/competition1/' + matchId)
         table.w3-table.w3-card.w3-hover-shadow
           tr.w3-white
             td.w3-text-green Green
