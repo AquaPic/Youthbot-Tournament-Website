@@ -1,11 +1,11 @@
 .ybot-animate {
-  -webkit-transition: -webkit-transform 1s,opacity 1s,background 1s,width 1s,height 1s,font-size 1s, margin 0.4s;
+  -webkit-transition: -webkit-transform 1s,opacity 1s,background 1s,width 1s,height 1s,font-size 1s, margin 0.4s, padding 0.4s;
   -o-transition-property: width,height,-o-transform,background,font-size,opacity;
   -o-transition-duration: 1s,1s,1s,1s,1s,1s;
   -moz-transition-property: width,height,-o-transform,background,font-size,opacity;
   -moz-transition-duration: 1s,1s,1s,1s,1s,1s;
-  transition-property: width,height,transform,background,font-size,opacity,margin;
-  transition-duration: 1s,1s,1s,1s,1s,1s,0.4s;
+  transition-property: width,height,transform,background,font-size,opacity,margin, padding;
+  transition-duration: 1s,1s,1s,1s,1s,1s,0.4s, 0.4s;
 }
 
 .ybot-theme-pri, .ybot-theme-hover-pri:hover {

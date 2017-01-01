@@ -11,11 +11,11 @@ html
     -var active = 'Standings'
     -var baseurl ='/'
 
-    nav#side_nav.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display:none;')
+    nav#side_nav.w3-top.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display:none;')
       div.w3-container.ybot-theme-pri
         h5
           span
-            a.ybot-theme-hover-pri(href='/' style='padding: 0; display: inline;') Standings
+            a.ybot-theme-hover-pri.w3-padding-0(href='/' style='display: inline;') Standings
           span.w3-right.w3-large.w3-closenav(href='javascript:void(0)', onclick='sidebar_close()') X
 
       mixin tournLinks(name, display)
@@ -33,13 +33,18 @@ html
       +tournLinks('practice', 'Practice')
       +tournLinks('field-testing', 'Field Testing')
 
-    header.w3-container.ybot-theme-pri
-      h2
-        span#open_nav.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
-        | &#32;&#32;
-        a#titlebar.ybot-animate.ybot-no-decoration(style='margin-left:0px;' href=baseurl)= active
+    #header.w3-top
+      ul.w3-navbar.ybot-theme-pri
+        li
+          a.w3-xlarge(href='javascript:void(0)' onclick='sidebar_open()') ☰
+        li#header_title.ybot-animate(style='margin-left:0px;')
+          a.w3-xlarge(href=baseurl) #{active}
+        li
+          a.w3-xlarge(href='#') Link
+        li
+          a.w3-xlarge(href='#') Link
 
-    #main.w3-container(style='margin-top:11px; margin-left:40px; margin-right:40px;')
+    #main.w3-container(style='margin-top:68px; margin-left:40px; margin-right:40px;')
       block content
 
   script(src='/javascripts/scripts.js')
