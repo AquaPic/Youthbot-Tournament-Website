@@ -10,20 +10,19 @@ html
   body
     -var active = 'Standings'
 
-    nav#sidebar.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display:none;')
-      div.w3-container.ybot-theme-seca
+    nav#side_nav.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display:none;')
+      div.w3-container.ybot-theme-pri
         h5
           span
-            a.w3-hover-opacity(href='/' style='padding: 0; display: inline;') Standings
-          span.w3-right
-            a.w3-large.w3-hover-opacity(href='javascript:void(0)', onclick='sidebar_close()' style='padding: 0;') x
+            a.ybot-theme-hover-pri(href='/' style='padding: 0; display: inline;') Standings
+          span.w3-right.w3-large.w3-closenav(href='javascript:void(0)', onclick='sidebar_close()') x
 
       mixin tournLinks(name, display)
         if (String(url).includes(name))
           -active = display
-          a.w3-teal.ybot-theme-hover-secc(href='/' + name)= display
+          a.ybot-theme-secc.w3-hover-shadow(href='/' + name)= display
         else
-          a.ybot-theme-hover-secc(href='/' + name)= display
+          a.w3-hover-shadow(href='/' + name)= display
 
       +tournLinks('competition1', '1st Competition')
       +tournLinks('competition2', '2nd Competition')
@@ -34,7 +33,7 @@ html
 
     header.w3-container.ybot-theme-pri
       h2
-        a#opennavbtn.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
+        a#open_nav.w3-opennav.w3-xlarge(onclick='sidebar_open()') ☰
         | &#32;&#32;
         span#titlebar.ybot-animate(style='margin-left:0px;')= active
 

@@ -1,17 +1,19 @@
 extends layout
 
 block content
-  mixin columns
+  mixin columns(intermatch, round)
     td
-      table.w3-table.w3-card.w3-hover-shadow
-        tr.w3-white
-          td Green
-          td 0
-          td.w3-green I
-        tr.ybot-theme-secb
-          td Red
-          td 0
-          td.w3-red I
+      -var matchId = 6 * (round - 1) + intermatch
+      a(href='/competition1/' + matchId style='text-decoration: none;')
+        table.w3-table.w3-card.w3-hover-shadow
+          tr.w3-white
+            td.w3-text-green Green
+            td 0
+            td I
+          tr.ybot-theme-secb
+            td.w3-text-red Red
+            td 0
+            td I
 
   table.w3-table.w3-centered.w3-bordered
     thead
@@ -23,10 +25,10 @@ block content
         th Round 5
         th Round 6
 
-    -for (var i=1; i<=6; ++i) {
+    -for (var intermatch=1; intermatch<=6; ++intermatch) {
       tr
-        -for (var j=1; j<=6; ++j) {
-          +columns
+        -for (var round=1; round<=6; ++round) {
+          +columns(intermatch, round)
         -}
     -}
 
@@ -38,9 +40,9 @@ block content
         th Round 10
         th Round 11
 
-    -for (var i=1; i<=6; ++i) {
+    -for (var intermatch=1; intermatch<=6; ++intermatch) {
       tr
-        -for (var j=1; j<=5; ++j) {
-          +columns
+        -for (var round=7; round<=11; ++round) {
+          +columns(intermatch, round)
         -}
     -}

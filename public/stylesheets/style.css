@@ -10,24 +10,20 @@
 
 .ybot-theme-pri, .ybot-theme-hover-pri:hover {
   color: #fff !important;
-  /*background-color: #984B43 !important;*/
   background-color: #B56357 !important;
 }
 
 .ybot-theme-seca, .ybot-theme-hover-seca:hover {
   color: #000 !important;
-  /*background-color: #EAC67A !important;*/
   background-color: #84DBC0 !important;
-} 
+}
 
 .ybot-theme-secb, .ybot-theme-hover-secb:hover {
   color: #000 !important;
-  /*background-color: #233237 !important;*/
   background-color: #EAE3EA !important;
 }
 
 .ybot-theme-secc, .ybot-theme-hover-secc:hover {
   color: #000 !important;
-  /*background-color: #18121E !important;*/
   background-color: #A7B3A5 !important;
 }
