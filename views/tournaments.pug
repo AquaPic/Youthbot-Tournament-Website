@@ -2,21 +2,24 @@ extends layout
 
 block links
   li
+    a.w3-large(href='#matches') Matches
+  li
     a.w3-large(href='#standings') Standings
 
 block content
-  div
+  #matches.ybot-anchor
+  w3-row
     mixin columns(intermatch, round)
       td
         -var matchId = 6 * (round - 1) + intermatch
         a.ybot-no-decoration(href='/competition1/' + matchId)
           table.w3-table.w3-card.w3-hover-shadow
             tr.w3-white
-              td.w3-text-green Green
+              td.w3-text-green.w3-left-align Green
               td 0
               td I
             tr.ybot-theme-secb
-              td.w3-text-red Red
+              td.w3-text-red.w3-left-align Red
               td 0
               td I
 
