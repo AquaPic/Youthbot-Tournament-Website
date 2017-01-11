@@ -3,10 +3,10 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', {
-      url: req.originalUrl,
-      title: 'My Test App'
-    });
+  res.render('index', {
+    url: req.originalUrl,
+    title: 'YouthBOT 2017 Standings'
+  });
 });
 
 module.exports = router;
