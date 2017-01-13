@@ -11,8 +11,9 @@ block content
   w3-row
     mixin columns(intermatch, round)
       td
-        -var matchId = 6 * (round - 1) + intermatch
-        a.ybot-no-decoration(href='/competition1/' + matchId)
+        -var matchId = '/' + tournamentName + '/' + (6 * (round - 1) + intermatch)
+
+        a.ybot-no-decoration(href= matchId)
           table.w3-table.w3-card.w3-hover-shadow
             tr.w3-white
               td.w3-text-green.w3-left-align Green

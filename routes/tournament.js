@@ -47,7 +47,10 @@ router.get('/', function(req, res, next) {
     next(err);
   }
 
-  res.render('tournaments', {url: req.originalUrl})
+  res.render('tournaments', {
+    url: req.originalUrl,
+    tournamentName: tourn.name
+  })
 })
 
 router.get('/:matchId', function(req, res, next) {
@@ -69,23 +72,29 @@ router.get('/:matchId', function(req, res, next) {
         next(err)
       }
 
-      var redName, greenName, score
+      var greenName, greenScore, redName, redScore
       if(rows[0]) {
-        redName = rows[0].red_team
+
+
         greenName = rows[0].green_team
-        score = rows[0].score
+        greenScore = rows[0].green_score
+        redName = rows[0].red_team
+        redScore = rows[0].red_score
       } else {
-        redName = 'Red'
         greenName = 'Green'
-        score = '0'
+        greenScore = '0'
+        redName = 'Red'
+        redScore = '0'
       }
 
       res.render('matches', {
         url: req.originalUrl,
+        tournamentId: tourn.id,
         matchId: req.params.matchId,
-        redTeamName: redName,
         greenTeamName: greenName,
-        score: score
+        greenTeamScore: greenScore,
+        redTeamName: redName,
+        redTeamScore: redScore
       })
     }
   )
