@@ -8,12 +8,12 @@ var state = {
 }
 
 exports.connect = function(done) {
-  tunnel(config.settings.ssh, function(err, server) {
-    if (err)
-      return done (err)
-  })
+  //tunnel(config.settings.ssh, function(err, server) {
+  //  if (err)
+  //    return done (err)
+  //})
 
-  state.pool = mysql.createPool(config.settings.sql)
+  state.pool = mysql.createPool(config.settings.sqlDirect)
   done(false)
 }
 

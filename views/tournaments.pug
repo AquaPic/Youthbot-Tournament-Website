@@ -7,54 +7,72 @@ block links
     a.w3-large(href='#standings') Standings
 
 block content
+  mixin columns(intermatch, round)
+    -var matchId = 6 * (round - 1) + intermatch
+    -var matchString = '/' + tournamentName + '/' + matchId
+    .w3-col.l2
+      if(matches[matchId])
+        a.ybot-no-decoration(href= matchString)
+          .w3-card.w3-hover-shadow
+            .w3-container
+              p
+                span.w3-text-green= matches[matchId].greenTeam
+                span.w3-right= matches[matchId].greenScore
+            .w3-container.ybot-theme-secb
+              p
+                span.w3-text-red= matches[matchId].redTeam
+                span.w3-right= matches[matchId].redScore
+      else
+        .w3-card
+          .w3-container
+            p
+              span.w3-text-green.w3-left-align Green
+              span.w3-right 0
+          .w3-container.ybot-theme-secb
+            p
+              span.w3-text-red.w3-left-align Red
+              span.w3-right 0
+
   #matches.ybot-anchor
-  w3-row
-    mixin columns(intermatch, round)
-      td
-        -var matchId = '/' + tournamentName + '/' + (6 * (round - 1) + intermatch)
+  .w3-row.ybot-theme-seca.w3-center
+    .w3-col.l2
+      h4 Round 1
+    .w3-col.l2
+      h4 Round 2
+    .w3-col.l2
+      h4 Round 3
+    .w3-col.l2
+      h4 Round 4
+    .w3-col.l2
+      h4 Round 5
+    .w3-col.l2
+      h4 Round 6
 
-        a.ybot-no-decoration(href= matchId)
-          table.w3-table.w3-card.w3-hover-shadow
-            tr.w3-white
-              td.w3-text-green.w3-left-align Green
-              td 0
-              td I
-            tr.ybot-theme-secb
-              td.w3-text-red.w3-left-align Red
-              td 0
-              td I
-
-    table.w3-table.w3-centered.w3-bordered
-      thead
-        tr.ybot-theme-seca
-          th Round 1
-          th Round 2
-          th Round 3
-          th Round 4
-          th Round 5
-          th Round 6
-
-      -for (var intermatch=1; intermatch<=6; ++intermatch) {
-        tr
-          -for (var round=1; round<=6; ++round) {
-            +columns(intermatch, round)
-          -}
+  -for (var intermatch=1; intermatch<=6; ++intermatch) {
+    .w3-row-padding(style="margin-top:12px;")
+      -for (var round=1; round<=6; ++round) {
+        +columns(intermatch, round)
       -}
+  -}
 
-      thead
-        tr.ybot-theme-seca
-          th Round 7
-          th Round 8
-          th Round 9
-          th Round 10
-          th Round 11
+  .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
+    .w3-col.l2
+      h4 Round 7
+    .w3-col.l2
+      h4 Round 8
+    .w3-col.l2
+      h4 Round 9
+    .w3-col.l2
+      h4 Round 10
+    .w3-col.l2
+      h4 Round 11
 
-      -for (var intermatch=1; intermatch<=6; ++intermatch) {
-        tr
-          -for (var round=7; round<=11; ++round) {
-            +columns(intermatch, round)
-          -}
+  -for (var intermatch=1; intermatch<=6; ++intermatch) {
+    .w3-row-padding(style="margin-top:12px;")
+      -for (var round=7; round<=11; ++round) {
+        +columns(intermatch, round)
       -}
+  -}
 
-    #standings.ybot-anchor
-    div
+  #standings.ybot-anchor
+  div

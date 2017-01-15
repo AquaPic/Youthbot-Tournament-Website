@@ -1,19 +1,105 @@
 extends layout
 
+block links
+  li
+    a.w3-large(href='#results') Overall
+  li
+    a.w3-large(href='#individualTeam') Individual Team
+  li
+    a.w3-large(href='#autoMode') Auto Mode
+  li
+    a.w3-large(href='#manualMode') Manual Mode
+  if(match.notes !== null)
+    li
+      a.w3-large(href='#notes') Notes
+
 block content
+  mixin matchElementWhite(name, variable)
+    .w3-container
+      p(style="padding-right:16px; padding-left: 16px;")
+        span= name
+        span.w3-right= variable
+
+  mixin matchElementGrey(name, variable)
+    .w3-container.ybot-theme-secb
+      p(style="padding-right:16px; padding-left: 16px;")
+        span= name
+        span.w3-right= variable
+
   #results.ybot-anchor
-  .w3-content.w3-card-12.ybot-theme-secb
+  .w3-content.w3-card-4
     .ybot-theme-seca.w3-center
       h3 Match #{matchId}
     .w3-row-padding
       .w3-col(style='width: 45%;')
         p.w3-xlarge
-          span.w3-text-green #{greenTeamName}
-          span.w3-right #{greenTeamScore}
-      .w3-col(style='width: 10%;')
-        .w3-display-container(style='width: 100%; height: 82px')
-          .w3-display-middle and
-      .w3-col(style='width: 45%;')
+          span.w3-text-green #{match.greenName}
+          span.w3-right #{match.greenScore}
+      .w3-col.w3-container.w3-right(style='width: 45%;')
         p.w3-xlarge
-          span.w3-left #{redTeamScore}
-          span.w3-right.w3-text-red #{redTeamName}
+          span.w3-left #{match.redScore}
+          span.w3-right.w3-text-red #{match.redName}
+      .w3-rest
+        .w3-display-container(style='width: 100%; height: 60px')
+          .w3-display-middle and
+
+  #individualTeam.ybot-anchor
+  .w3-content.w3-row(style="margin-top:16px;")
+    .w3-col.w3-card-4(style='width: 49%;')
+      +matchElementWhite('Penalties', match.greenPenalty)
+      if(match.greenDq === 0)
+        +matchElementGrey('DQ','No')
+      else
+        +matchElementGrey('DQ','Yes')
+      if(match.greenResult === 'P')
+        +matchElementWhite('Participated','Yes')
+      else
+        +matchElementWhite('Participated','No')
+
+    .w3-col.w3-card-4.w3-right(style='width: 49%;')
+      +matchElementWhite('Penalties', match.redPenalty)
+      if(match.redDq === 0)
+        +matchElementGrey('DQ','No')
+      else
+        +matchElementGrey('DQ','Yes')
+      if(match.redResult === 'P')
+        +matchElementWhite('Participated','Yes')
+      else
+        +matchElementWhite('Participated','No')
+
+  #autoMode.ybot-anchor
+  .w3-content.w3-card-4(style="margin-top:16px;")
+    .ybot-theme-secc
+      h4(style="padding-left: 8px") Auto Mode
+    +matchElementWhite('Corners Tested', match.autoCornersTested)
+    +matchElementGrey('Emergency Towers Cycled', match.autoEmergencyCycled)
+    +matchElementWhite('Solar Panel', match.autoSolarPanel)
+
+  #manualMode.ybot-anchor
+  .w3-content.w3-card-4(style="margin-top:16px;")
+    .ybot-theme-secc
+      h4(style="padding-left: 8px") Manual Mode
+    +matchElementWhite('Solar Panel 1', match.manualSolarPanel1)
+    +matchElementGrey('Solar Panel 2', match.manualSolarPanel2)
+    +matchElementWhite('Emergencies Cleared', match.manualEmergencyCleared)
+    case match.rocketPosition
+      when 3
+        +matchElementGrey('Rocket Position', 'Door closed')
+      when 5
+        +matchElementGrey('Rocket Position', 'Launch Position')
+      default
+        +matchElementGrey('Rocket Position', 'Loading')
+    +matchElementWhite('Rock Weight', match.rockWeight)
+    +matchElementGrey('Rock Score', match.rockScore)
+    if(match.rocketBonus === 1)
+      +matchElementWhite('Rocket Launched','Yes')
+    else
+      +matchElementWhite('Rocket Launched','No')
+
+  if(match.notes !== null)
+    #notes.ybot-anchor
+    .w3-content.w3-card-4(style="margin-top:16px;")
+      .ybot-theme-secc
+        h4(style="padding-left: 8px") Notes
+      .w3-container
+        p(style="padding-right:16px; padding-left: 16px;") #{match.notes}
