@@ -70,7 +70,6 @@ router.get('/', function(req, res, next) {
         var matches = new Object();
         if(rows[0]) {
           for (let row of rows) {
-            console.log(row.match_id)
             matches[row.match_id] = {
               greenTeam: row.green_team,
               greenScore: row.green_score,
