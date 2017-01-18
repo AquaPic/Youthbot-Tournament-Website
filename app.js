@@ -49,7 +49,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-db.connect(function(err) {
+db.connect(false, function(err) {
   if(err)
     next(err)
 

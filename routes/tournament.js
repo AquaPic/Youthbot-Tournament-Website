@@ -53,13 +53,17 @@ router.get('/', function(req, res, next) {
     next(err);
   }
 
+  var matchIniatized = false
+
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else {
-    db.get(function(err) {
-      if (err)
-        next(err)
-    }).query(
+  } else if (tourn.id === 2) {
+    db.get(
+      function(err) {
+        if (err)
+          next(err)
+      }
+    ).query(
       'select * from tournament_info where tournament_id = ?',
       tourn.id,
       function(err, rows) {
@@ -69,6 +73,7 @@ router.get('/', function(req, res, next) {
 
         var matches = new Object();
         if(rows[0]) {
+          matchIniatized = true
           for (let row of rows) {
             matches[row.match_id] = {
               greenTeam: row.green_team,
@@ -87,15 +92,46 @@ router.get('/', function(req, res, next) {
             tournamentName: tourn.urlName,
             matches: matches
           })
-
-        } else {
-          res.render('index', {
-            url: req.originalUrl,
-            title: tourn.name
-          })
         }
       }
     )
+
+    if (!matchIniatized) {
+      db.get(
+        function(err) {
+          if (err)
+            next(err)
+        }
+      ).query(
+        'select school_name from schools where participating=1;',
+        function(err, rows) {
+          if (err) {
+            next(err)
+          }
+
+          var teams = new Array();
+          if(rows[0]) {
+            for (let row of rows) {
+              teams.push(row.school_name)
+            }
+          }
+
+          teams.sort()
+
+          res.render('team-selection', {
+            url: req.originalUrl,
+            title: tourn.name,
+            teams: teams
+          })
+        }
+      )
+    }
+
+  } else {
+    res.render('index', {
+      url: req.originalUrl,
+      title: tourn.name
+    })
   }
 })
 
@@ -107,10 +143,12 @@ router.get('/:matchId', function(req, res, next) {
     next(err);
   }
 
-  db.get(function(err) {
-    if (err)
-      next(err)
-  }).query(
+  db.get(
+    function(err) {
+      if (err)
+        next(err)
+    }
+  ).query(
     'select * from match_info where tournament_id = ? and match_id = ?',
     [tourn.id, req.params.matchId],
     function(err, rows) {
@@ -177,6 +215,11 @@ router.get('/:matchId', function(req, res, next) {
       })
     }
   )
+})
+
+router.post('/', function(req, res, next) {
+  console.log('new school name: ' + req.body.schoolName)
+  res.redirect('/' + currentTournament(req.originalUrl).urlName)
 })
 
 module.exports = router

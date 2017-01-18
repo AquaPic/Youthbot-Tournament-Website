@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  mixin teamElement(id, name)
+    -var fullId = 'team' + id
+    -var scriptPath = 'team_selection_click(' + id + ')'
+    li(id=fullId onclick=scriptPath)= name
+
+  .w3-content.w3-card-2
+    .ybot-theme-seca
+      .w3-row
+        #addSchool.w3-col.w3-right(style='width: 95px; margin-left: 16px;')
+          a.ybot-no-decoration(href='javascript:void(0)', onclick='show_add_team()')
+            button.w3-btn.ybot-theme-seca +School
+        .w3-rest.w3-center
+          h3(style='margin-bottom: 0px; margin-top: 0px;') Teams Participating in #{title}
+    form#addTeam.w3-container(method='post' style='display: none;')
+      label.w3-label School Name
+      .w3-row(style='margin-bottom: 12px;')
+        .w3-col.w3-right(style='width: 62px; margin-left: 16px; padding-top: 3px;')
+          button.w3-btn.ybot-theme-seca Add
+        .w3-rest
+          input.w3-input.w3-border(type='text' name='schoolName')
+
+    ul.w3-ul.ybot-theme-secb
+      -for (var i=1; i<teams.length; ++i) {
+        +teamElement(i, teams[i])
+      -}

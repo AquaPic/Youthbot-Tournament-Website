@@ -13,7 +13,7 @@ block content
     .w3-col.l2
       if(matches[matchId])
         a.ybot-no-decoration(href= matchString)
-          .w3-card.w3-hover-shadow
+          .w3-card-2.w3-hover-shadow
             .w3-container
               p
                 span.w3-text-green= matches[matchId].greenTeam
@@ -23,7 +23,7 @@ block content
                 span.w3-text-red= matches[matchId].redTeam
                 span.w3-right= matches[matchId].redScore
       else
-        .w3-card
+        .w3-card.w3-opacity
           .w3-container
             p
               span.w3-text-green.w3-left-align Green

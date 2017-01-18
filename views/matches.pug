@@ -27,7 +27,7 @@ block content
         span.w3-right= variable
 
   #results.ybot-anchor
-  .w3-content.w3-card-4
+  .w3-content.w3-card-2
     .ybot-theme-seca.w3-center
       h3 Match #{matchId}
     .w3-row-padding
@@ -45,7 +45,7 @@ block content
 
   #individualTeam.ybot-anchor
   .w3-content.w3-row(style="margin-top:16px;")
-    .w3-col.w3-card-4(style='width: 49%;')
+    .w3-col.w3-card-2(style='width: 49%;')
       +matchElementWhite('Penalties', match.greenPenalty)
       if(match.greenDq === 0)
         +matchElementGrey('DQ','No')
@@ -56,7 +56,7 @@ block content
       else
         +matchElementWhite('Participated','No')
 
-    .w3-col.w3-card-4.w3-right(style='width: 49%;')
+    .w3-col.w3-card-2.w3-right(style='width: 49%;')
       +matchElementWhite('Penalties', match.redPenalty)
       if(match.redDq === 0)
         +matchElementGrey('DQ','No')
@@ -68,7 +68,7 @@ block content
         +matchElementWhite('Participated','No')
 
   #autoMode.ybot-anchor
-  .w3-content.w3-card-4(style="margin-top:16px;")
+  .w3-content.w3-card-2(style="margin-top:16px;")
     .ybot-theme-secc
       h4(style="padding-left: 8px") Auto Mode
     +matchElementWhite('Corners Tested', match.autoCornersTested)
@@ -76,7 +76,7 @@ block content
     +matchElementWhite('Solar Panel', match.autoSolarPanel)
 
   #manualMode.ybot-anchor
-  .w3-content.w3-card-4(style="margin-top:16px;")
+  .w3-content.w3-card-2(style="margin-top:16px;")
     .ybot-theme-secc
       h4(style="padding-left: 8px") Manual Mode
     +matchElementWhite('Solar Panel 1', match.manualSolarPanel1)
