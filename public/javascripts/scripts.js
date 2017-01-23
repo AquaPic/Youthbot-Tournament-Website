@@ -27,3 +27,19 @@ function team_selection_click(number) {
     element.classList.add ('ybot-theme-secc')
   }
 }
+
+function send_team_post() {
+  var listElements = document.body.getElementsByTagName("li")
+  var schoolsInMatch = {}
+  schoolsInMatch['schools'] = []
+  for (let element of listElements) {
+    if ((element.id.includes ('team')) && (element.className.match(/(?:^|\s)ybot-theme-secc(?!\S)/))) {
+      schoolsInMatch['schools'].push(element.textContent)
+    }
+  }
+
+  var xhr = new XMLHttpRequest()
+  xhr.open("POST", '/competition1', true)
+  xhr.setRequestHeader('Content-Type', 'application/json')
+  xhr.send(JSON.stringify(schoolsInMatch))
+}

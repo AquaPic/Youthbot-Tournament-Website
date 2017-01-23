@@ -71,10 +71,22 @@ router.get('/', function(req, res, next) {
           next(err)
         }
 
-        var matches = new Object();
         if(rows[0]) {
+          var matches = {}
           matchIniatized = true
+          var schools = []
+          matches['matchesPerRound'] = 0
+          matches['roundCount'] = 0
+
           for (let row of rows) {
+            if (!schools.includes(row.green_team)) {
+              schools.push (row.green_team)
+            }
+
+            if (!schools.includes(row.red_team)) {
+              schools.push (row.red_team)
+            }
+
             matches[row.match_id] = {
               greenTeam: row.green_team,
               greenScore: row.green_score,
@@ -87,46 +99,50 @@ router.get('/', function(req, res, next) {
             }
           }
 
+          var schoolsParticipating = schools.length
+          matches['matchesPerRound'] = schoolsParticipating / 2
+          matches['roundCount'] = schoolsParticipating - 1
+
           res.render('tournaments', {
             url: req.originalUrl,
             tournamentName: tourn.urlName,
             matches: matches
           })
         }
+
+        if (!matchIniatized) {
+          db.get(
+            function(err) {
+              if (err)
+                next(err)
+            }
+          ).query(
+            'select school_name from schools where participating=1;',
+            function(err, rows) {
+              if (err) {
+                next(err)
+              }
+
+              var teams = new Array();
+              if(rows[0]) {
+                for (let row of rows) {
+                  teams.push(row.school_name)
+                }
+              }
+
+              teams.sort()
+
+              res.render('team-selection', {
+                url: req.originalUrl,
+                title: tourn.name,
+                teams: teams
+              })
+            }
+          )
+        }
+
       }
     )
-
-    if (!matchIniatized) {
-      db.get(
-        function(err) {
-          if (err)
-            next(err)
-        }
-      ).query(
-        'select school_name from schools where participating=1;',
-        function(err, rows) {
-          if (err) {
-            next(err)
-          }
-
-          var teams = new Array();
-          if(rows[0]) {
-            for (let row of rows) {
-              teams.push(row.school_name)
-            }
-          }
-
-          teams.sort()
-
-          res.render('team-selection', {
-            url: req.originalUrl,
-            title: tourn.name,
-            teams: teams
-          })
-        }
-      )
-    }
-
   } else {
     res.render('index', {
       url: req.originalUrl,
@@ -149,7 +165,7 @@ router.get('/:matchId', function(req, res, next) {
         next(err)
     }
   ).query(
-    'select * from match_info where tournament_id = ? and match_id = ?',
+    'select * from match_info where tournament_id = ? and match_id = ?;',
     [tourn.id, req.params.matchId],
     function(err, rows) {
       if (err) {
@@ -159,6 +175,7 @@ router.get('/:matchId', function(req, res, next) {
       var matchInfo;
       if(rows[0]) {
         matchInfo = {
+          played: rows[0].played,
           greenName: rows[0].green_team,
           greenScore: rows[0].green_score,
           greenPenalty: rows[0].green_penalty,
@@ -183,16 +200,17 @@ router.get('/:matchId', function(req, res, next) {
         }
       } else {
         matchInfo = {
+          played: 0,
           greenName: 'Green Team',
           greenScore: 0,
           greenPenalty: 0,
           greenDq: 0,
-          greenResult: 'N',
+          greenResult: 'I',
           redName: 'Red Team',
           redScore: 0,
           redPenalty: 0,
           redDq: 0,
-          redResult: 'N',
+          redResult: 'I',
           autoCornersTested: 0,
           autoEmergencyCycled: 0,
           autoSolarPanel: 0,
@@ -218,8 +236,123 @@ router.get('/:matchId', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
-  console.log('new school name: ' + req.body.schoolName)
-  res.redirect('/' + currentTournament(req.originalUrl).urlName)
+  if (req.body.schoolName) {
+    db.get(
+      function(err) {
+        if (err)
+          next(err)
+      }
+    ).query(
+      'insert into schools (school_name, participating) values (?, 1);',
+      req.body.schoolName,
+      function(err, rows) {
+        if (err) {
+          next(err)
+        }
+
+        res.redirect('/' + currentTournament(req.originalUrl).urlName)
+      }
+    )
+  } else {
+    next()
+  }
 })
+
+router.post('/', function(req, res, next) {
+  if (req.body.schools) {
+    var tourn = currentTournament(req.originalUrl)
+    if (!tourn) {
+      var err = new Error('Not Found');
+      err.status = 404;
+      next(err);
+    }
+
+    var schools = req.body.schools
+    if (schools.length % 2 === 1) {
+      schools.splice(0, 0, 'Bye')
+    }
+
+    var schoolIds = {}
+    db.get(
+      function(err) {
+        if (err)
+          next(err)
+      }
+    ).query(
+      'select * from schools;',
+      function(err, rows) {
+        if (err) {
+          next(err)
+        }
+
+        if(rows[0]) {
+          for (let row of rows) {
+            if (schools.includes(row.school_name)) {
+              schoolIds[row.school_name] = row.school_id
+            }
+          }
+        }
+
+        var schoolsParticipating = schools.length
+        var matchesPerRound = schoolsParticipating / 2
+        var roundCount = schoolsParticipating - 1
+
+        var sqlQuery = 'insert into matches (tournament_id, match_number, played, red_team, red_result, green_team, green_result) values '
+        var matchNumber = 1
+
+        for (var round = 0; round < roundCount; ++round) {
+          for (var intermatch = 0; intermatch < matchesPerRound - 1; ++intermatch) {
+            var green = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
+            var red = indexLimiter(green + (intermatch * 2) + 1, schoolsParticipating)
+
+            if (sqlQuery.endsWith (')')) {
+              sqlQuery += (', ')
+            }
+
+            sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+            sqlQuery += (schoolIds[schools[red]] + ', \'N\', ')
+            sqlQuery += (schoolIds[schools[green]] + ', \'N\')')
+            ++matchNumber
+          }
+
+          var red = 0
+          var green = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
+
+          if (sqlQuery.endsWith (')')) {
+            sqlQuery += (', ')
+          }
+
+          sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+          sqlQuery += (schoolIds[schools[red]] + ', \'N\', ')
+          sqlQuery += (schoolIds[schools[green]] + ', \'N\')')
+          ++matchNumber
+        }
+
+        db.get(
+          function(err) {
+            if (err)
+              next(err)
+          }
+        ).query(sqlQuery, function(err, rows) {
+          if (err) {
+            next(err)
+          }
+
+          res.redirect(302, '/' + currentTournament(req.originalUrl).urlName)
+        })
+      }
+    )
+  } else {
+    res.redirect('/' + currentTournament(req.originalUrl).urlName)
+  }
+})
+
+indexLimiter = function (index, max) {
+  if (index >= max) {
+    return (index % max) + 1
+  } else {
+    return index
+  }
+}
 
 module.exports = router

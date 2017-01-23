@@ -7,8 +7,10 @@ block links
     a.w3-large(href='#standings') Standings
 
 block content
+  -var matchesPerRound = matches['matchesPerRound']
+  -var roundCount = matches['roundCount']
   mixin columns(intermatch, round)
-    -var matchId = 6 * (round - 1) + intermatch
+    -var matchId = matchesPerRound * (round - 1) + intermatch
     -var matchString = '/' + tournamentName + '/' + matchId
     .w3-col.l2
       if(matches[matchId])
@@ -34,45 +36,45 @@ block content
               span.w3-right 0
 
   #matches.ybot-anchor
+  -var maxRounds = 0
+  -if (roundCount >= 6) {
+  -  maxRounds = 6
+  -} else {
+  -  maxRounds = roundCount
+  -}
+
   .w3-row.ybot-theme-seca.w3-center
-    .w3-col.l2
-      h4 Round 1
-    .w3-col.l2
-      h4 Round 2
-    .w3-col.l2
-      h4 Round 3
-    .w3-col.l2
-      h4 Round 4
-    .w3-col.l2
-      h4 Round 5
-    .w3-col.l2
-      h4 Round 6
+    -for (var i=1; i<=maxRounds; ++i) {
+      .w3-col.l2
+        h4 Round #{i}
+    -}
 
-  -for (var intermatch=1; intermatch<=6; ++intermatch) {
+  -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
     .w3-row-padding(style="margin-top:12px;")
-      -for (var round=1; round<=6; ++round) {
+      -for (var round=1; round<=maxRounds; ++round) {
         +columns(intermatch, round)
       -}
   -}
 
-  .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
-    .w3-col.l2
-      h4 Round 7
-    .w3-col.l2
-      h4 Round 8
-    .w3-col.l2
-      h4 Round 9
-    .w3-col.l2
-      h4 Round 10
-    .w3-col.l2
-      h4 Round 11
+  if (roundCount > 6)
+    -if (roundCount >= 12) {
+    -  maxRounds = 12
+    -} else {
+    -  maxRounds = roundCount
+    -}
 
-  -for (var intermatch=1; intermatch<=6; ++intermatch) {
-    .w3-row-padding(style="margin-top:12px;")
-      -for (var round=7; round<=11; ++round) {
-        +columns(intermatch, round)
+    .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
+      -for (var i=7; i<=maxRounds; ++i) {
+        .w3-col.l2
+          h4 Round #{i}
       -}
-  -}
+
+    -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+      .w3-row-padding(style="margin-top:12px;")
+        -for (var round=7; round<=maxRounds; ++round) {
+          +columns(intermatch, round)
+        -}
+    -}
 
   #standings.ybot-anchor
   div

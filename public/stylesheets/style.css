@@ -43,3 +43,7 @@ p {
   top: -60px;
   visibility: hidden;
 }
+
+.ybot-pointer {
+  cursor: default !important;
+}

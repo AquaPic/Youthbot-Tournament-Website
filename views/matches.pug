@@ -43,58 +43,63 @@ block content
         .w3-display-container(style='width: 100%; height: 60px')
           .w3-display-middle and
 
-  #individualTeam.ybot-anchor
-  .w3-content.w3-row(style="margin-top:16px;")
-    .w3-col.w3-card-2(style='width: 49%;')
-      +matchElementWhite('Penalties', match.greenPenalty)
-      if(match.greenDq === 0)
-        +matchElementGrey('DQ','No')
-      else
-        +matchElementGrey('DQ','Yes')
-      if(match.greenResult === 'P')
-        +matchElementWhite('Participated','Yes')
-      else
-        +matchElementWhite('Participated','No')
+  if (match.played === 1)
+    #individualTeam.ybot-anchor
+    .w3-content.w3-row(style="margin-top:16px;")
+      .w3-col.w3-card-2(style='width: 49%;')
+        +matchElementWhite('Penalties', match.greenPenalty)
+        if(match.greenDq === 0)
+          +matchElementGrey('DQ','No')
+        else
+          +matchElementGrey('DQ','Yes')
+        if(match.greenResult === 'P')
+          +matchElementWhite('Participated','Yes')
+        else
+          +matchElementWhite('Participated','No')
 
-    .w3-col.w3-card-2.w3-right(style='width: 49%;')
-      +matchElementWhite('Penalties', match.redPenalty)
-      if(match.redDq === 0)
-        +matchElementGrey('DQ','No')
-      else
-        +matchElementGrey('DQ','Yes')
-      if(match.redResult === 'P')
-        +matchElementWhite('Participated','Yes')
-      else
-        +matchElementWhite('Participated','No')
+      .w3-col.w3-card-2.w3-right(style='width: 49%;')
+        +matchElementWhite('Penalties', match.redPenalty)
+        if(match.redDq === 0)
+          +matchElementGrey('DQ','No')
+        else
+          +matchElementGrey('DQ','Yes')
+        if(match.redResult === 'P')
+          +matchElementWhite('Participated','Yes')
+        else
+          +matchElementWhite('Participated','No')
 
-  #autoMode.ybot-anchor
-  .w3-content.w3-card-2(style="margin-top:16px;")
-    .ybot-theme-secc
-      h4(style="padding-left: 8px") Auto Mode
-    +matchElementWhite('Corners Tested', match.autoCornersTested)
-    +matchElementGrey('Emergency Towers Cycled', match.autoEmergencyCycled)
-    +matchElementWhite('Solar Panel', match.autoSolarPanel)
+    #autoMode.ybot-anchor
+    .w3-content.w3-card-2(style="margin-top:16px;")
+      .ybot-theme-secc
+        h4(style="padding-left: 8px") Auto Mode
+      +matchElementWhite('Corners Tested', match.autoCornersTested)
+      +matchElementGrey('Emergency Towers Cycled', match.autoEmergencyCycled)
+      +matchElementWhite('Solar Panel', match.autoSolarPanel)
 
-  #manualMode.ybot-anchor
-  .w3-content.w3-card-2(style="margin-top:16px;")
-    .ybot-theme-secc
-      h4(style="padding-left: 8px") Manual Mode
-    +matchElementWhite('Solar Panel 1', match.manualSolarPanel1)
-    +matchElementGrey('Solar Panel 2', match.manualSolarPanel2)
-    +matchElementWhite('Emergencies Cleared', match.manualEmergencyCleared)
-    case match.rocketPosition
-      when 3
-        +matchElementGrey('Rocket Position', 'Door closed')
-      when 5
-        +matchElementGrey('Rocket Position', 'Launch Position')
-      default
-        +matchElementGrey('Rocket Position', 'Loading')
-    +matchElementWhite('Rock Weight', match.rockWeight)
-    +matchElementGrey('Rock Score', match.rockScore)
-    if(match.rocketBonus === 1)
-      +matchElementWhite('Rocket Launched','Yes')
-    else
-      +matchElementWhite('Rocket Launched','No')
+    #manualMode.ybot-anchor
+    .w3-content.w3-card-2(style="margin-top:16px;")
+      .ybot-theme-secc
+        h4(style="padding-left: 8px") Manual Mode
+      +matchElementWhite('Solar Panel 1', match.manualSolarPanel1)
+      +matchElementGrey('Solar Panel 2', match.manualSolarPanel2)
+      +matchElementWhite('Emergencies Cleared', match.manualEmergencyCleared)
+      case match.rocketPosition
+        when 3
+          +matchElementGrey('Rocket Position', 'Door closed')
+        when 5
+          +matchElementGrey('Rocket Position', 'Launch Position')
+        default
+          +matchElementGrey('Rocket Position', 'Loading')
+      +matchElementWhite('Rock Weight', match.rockWeight)
+      +matchElementGrey('Rock Score', match.rockScore)
+      if(match.rocketBonus === 1)
+        +matchElementWhite('Rocket Launched','Yes')
+      else
+        +matchElementWhite('Rocket Launched','No')
+  else
+    .w3-content.w3-card-2(style="margin-top:16px;")
+      .ybot-theme-secc
+        h4(style="padding-left: 8px") Match not yet played
 
   if(match.notes !== null)
     #notes.ybot-anchor

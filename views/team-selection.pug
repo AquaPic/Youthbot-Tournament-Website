@@ -4,7 +4,7 @@ block content
   mixin teamElement(id, name)
     -var fullId = 'team' + id
     -var scriptPath = 'team_selection_click(' + id + ')'
-    li(id=fullId onclick=scriptPath)= name
+    li.ybot-pointer(id=fullId onclick=scriptPath)= name
 
   .w3-content.w3-card-2
     .ybot-theme-seca
@@ -14,7 +14,7 @@ block content
             button.w3-btn.ybot-theme-seca +School
         .w3-rest.w3-center
           h3(style='margin-bottom: 0px; margin-top: 0px;') Teams Participating in #{title}
-    form#addTeam.w3-container(method='post' style='display: none;')
+    form#addTeam.w3-container.ybot-animate(method='post' style='display: none;')
       label.w3-label School Name
       .w3-row(style='margin-bottom: 12px;')
         .w3-col.w3-right(style='width: 62px; margin-left: 16px; padding-top: 3px;')
@@ -23,6 +23,10 @@ block content
           input.w3-input.w3-border(type='text' name='schoolName')
 
     ul.w3-ul.ybot-theme-secb
-      -for (var i=1; i<teams.length; ++i) {
+      -for (var i=0; i<teams.length; ++i) {
         +teamElement(i, teams[i])
       -}
+
+  .w3-content
+    a.ybot-no-decoration.w3-right(href='javascript:void(0)', onclick='send_team_post()')
+      button.w3-btn.ybot-theme-seca(style='margin-top: 12px;') Generate Matches
