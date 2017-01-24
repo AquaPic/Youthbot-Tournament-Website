@@ -86,7 +86,7 @@ router.get('/', function(req, res, next) {
           matches['matchesPerRound'] = 0
           matches['roundCount'] = 0
 
-          for (let row of rows) {
+          for (var row of rows) {
             if (!schools.includes(row.green_team)) {
               schools.push (row.green_team)
             }
@@ -134,7 +134,7 @@ router.get('/', function(req, res, next) {
 
               var teams = new Array();
               if(rows[0]) {
-                for (let row of rows) {
+                for (var row of rows) {
                   teams.push(row.school_name)
                 }
               }
@@ -353,7 +353,7 @@ router.post('/', function(req, res, next) {
         }
 
         if(rows[0]) {
-          for (let row of rows) {
+          for (var row of rows) {
             if (schools.includes(row.school_name)) {
               schoolIds[row.school_name] = row.school_id
             }
