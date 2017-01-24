@@ -9,12 +9,13 @@ block content
   .w3-content.w3-card-2
     .ybot-theme-seca
       .w3-row
-        #addSchool.w3-col.w3-right(style='width: 95px; margin-left: 16px;')
-          a.ybot-no-decoration(href='javascript:void(0)', onclick='show_add_team()')
-            button.w3-btn.ybot-theme-seca +School
+        if(user)
+          #addSchool.w3-col.w3-right(style='width: 95px; margin-left: 16px;')
+            a.ybot-no-decoration(href='javascript:void(0)', onclick='show_add_team()')
+              button.w3-btn.ybot-theme-seca +School
         .w3-rest.w3-center
-          h3(style='margin-bottom: 0px; margin-top: 0px;') Teams Participating in #{title}
-    form#addTeam.w3-container.ybot-animate(method='post' style='display: none;')
+          h3(style='margin-bottom: 0px; margin-top: 0px;') Select Teams Participating in #{title}
+    form#addTeam.w3-container(method='post' style='display: none;')
       label.w3-label School Name
       .w3-row(style='margin-bottom: 12px;')
         .w3-col.w3-right(style='width: 62px; margin-left: 16px; padding-top: 3px;')
@@ -27,6 +28,7 @@ block content
         +teamElement(i, teams[i])
       -}
 
-  .w3-content
-    a.ybot-no-decoration.w3-right(href='javascript:void(0)', onclick='send_team_post()')
-      button.w3-btn.ybot-theme-seca(style='margin-top: 12px;') Generate Matches
+  if(user)
+    .w3-content
+      a.ybot-no-decoration.w3-right(href='javascript:void(0)', onclick='send_team_post()')
+        button.w3-btn.ybot-theme-seca(style='margin-top: 12px;') Generate Matches

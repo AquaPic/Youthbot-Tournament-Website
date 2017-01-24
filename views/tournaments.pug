@@ -76,5 +76,25 @@ block content
         -}
     -}
 
+  if (roundCount > 12)
+    -if (roundCount >= 18) {
+    -  maxRounds = 18
+    -} else {
+    -  maxRounds = roundCount
+    -}
+
+    .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
+      -for (var i=13; i<=maxRounds; ++i) {
+        .w3-col.l2
+          h4 Round #{i}
+      -}
+
+    -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+      .w3-row-padding(style="margin-top:12px;")
+        -for (var round=13; round<=maxRounds; ++round) {
+          +columns(intermatch, round)
+        -}
+    -}
+
   #standings.ybot-anchor
   div

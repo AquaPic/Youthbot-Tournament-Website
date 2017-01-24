@@ -13,13 +13,13 @@ exports.connect = function(useSsh, done) {
       if (err)
         return done (err)
     })
-    
+
     state.pool = mysql.createPool(config.settings.sqlTunnel)
   } else {
     state.pool = mysql.createPool(config.settings.sqlDirect)
   }
 
-  done(false)
+  done(null)
 }
 
 exports.get = function(done) {

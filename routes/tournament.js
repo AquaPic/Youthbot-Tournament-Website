@@ -45,6 +45,14 @@ function currentTournament(url) {
   return tourn
 }
 
+function indexLimiter(index, max) {
+  if (index >= max) {
+    return (index % max) + 1
+  } else {
+    return index
+  }
+}
+
 router.get('/', function(req, res, next) {
   var tourn = currentTournament(req.originalUrl)
   if (!tourn) {
@@ -105,6 +113,7 @@ router.get('/', function(req, res, next) {
 
           res.render('tournaments', {
             url: req.originalUrl,
+            user: req.user,
             tournamentName: tourn.urlName,
             matches: matches
           })
@@ -131,23 +140,19 @@ router.get('/', function(req, res, next) {
               }
 
               teams.sort()
-
               res.render('team-selection', {
                 url: req.originalUrl,
+                user: req.user,
                 title: tourn.name,
                 teams: teams
               })
             }
           )
         }
-
       }
     )
   } else {
-    res.render('index', {
-      url: req.originalUrl,
-      title: tourn.name
-    })
+    res.render('index', { url: req.originalUrl, user: req.user, title: tourn.name })
   }
 })
 
@@ -227,6 +232,7 @@ router.get('/:matchId', function(req, res, next) {
 
       res.render('matches', {
         url: req.originalUrl,
+        user: req.user,
         tournamentId: tourn.id,
         matchId: req.params.matchId,
         match: matchInfo
@@ -297,7 +303,10 @@ router.post('/', function(req, res, next) {
         var matchesPerRound = schoolsParticipating / 2
         var roundCount = schoolsParticipating - 1
 
-        var sqlQuery = 'insert into matches (tournament_id, match_number, played, red_team, red_result, green_team, green_result) values '
+        var sqlQuery = 'insert into matches '
+        sqlQuery += '(tournament_id, match_number, played, '
+        sqlQuery += 'red_team, red_result, green_team, green_result) values '
+
         var matchNumber = 1
 
         for (var round = 0; round < roundCount; ++round) {
@@ -338,7 +347,7 @@ router.post('/', function(req, res, next) {
             next(err)
           }
 
-          res.redirect(302, '/' + currentTournament(req.originalUrl).urlName)
+          res.redirect('/' + currentTournament(req.originalUrl).urlName)
         })
       }
     )
@@ -346,13 +355,5 @@ router.post('/', function(req, res, next) {
     res.redirect('/' + currentTournament(req.originalUrl).urlName)
   }
 })
-
-indexLimiter = function (index, max) {
-  if (index >= max) {
-    return (index % max) + 1
-  } else {
-    return index
-  }
-}
 
 module.exports = router

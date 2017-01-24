@@ -41,6 +41,11 @@ html
         li#header_title.ybot-animate
           a.w3-large(href=baseurl) #{active}
         block links
+        li.w3-right
+          if (user)
+            a.w3-large(href='#')= user.username
+          else
+            a.w3-large(href='/login') Login
 
     #main.w3-container(style='margin-top:53px; margin-left:40px; margin-right:40px; margin-bottom: 40px')
       block content
