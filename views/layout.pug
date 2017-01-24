@@ -6,11 +6,12 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='http://www.w3schools.com/lib/w3.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
     script(src='/javascripts/scripts.js')
 
   body
-    -var active = 'Standings'
-    -var baseurl ='/'
+    -var active = ''
+    -var baseurl =''
 
     #side_nav.w3-top.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display: none;')
       .w3-container.w3-padding-0
@@ -21,7 +22,7 @@ html
             a.w3-large(href='javascript:void(0)', onclick='sidebar_close()') x
 
       mixin tournLinks(name, display)
-        if (String(url).includes(name))
+        if (url.includes(name))
           -active = display
           -baseurl = '/' + name
           a.ybot-theme-secc(href='/' + name)= display
@@ -39,7 +40,11 @@ html
         li
           a.w3-large(href='javascript:void(0)' onclick='sidebar_open()') ☰
         li#header_title.ybot-animate
-          a.w3-large(href=baseurl) #{active}
+          a.w3-large(href='/')
+            i.fa.fa-home
+        if(baseurl && active)
+          li
+            a.w3-large(href=baseurl) #{active}
         block links
         li.w3-right
           if (user)

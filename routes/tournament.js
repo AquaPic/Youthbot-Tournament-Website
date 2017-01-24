@@ -241,6 +241,67 @@ router.get('/:matchId', function(req, res, next) {
   )
 })
 
+router.get('/override/:matchId', function(req, res, next) {
+  var tourn = currentTournament(req.originalUrl)
+  if (!tourn) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  }
+
+  db.get(
+    function(err) {
+      if (err)
+        next(err)
+    }
+  ).query(
+    'select * from match_info where tournament_id = ? and match_id = ?;',
+    [tourn.id, req.params.matchId],
+    function(err, rows) {
+      if (err) {
+        next(err)
+      }
+
+      var matchInfo;
+      if(rows[0]) {
+        matchInfo = {
+          played: rows[0].played,
+          greenName: rows[0].green_team,
+          greenScore: rows[0].green_score,
+          greenDq: rows[0].green_dq,
+          greenResult: rows[0].green_result,
+          redName: rows[0].red_team,
+          redScore: rows[0].red_score,
+          redDq: rows[0].red_dq,
+          redResult: rows[0].red_result,
+          notes: rows[0].notes
+        }
+      } else {
+        matchInfo = {
+          played: 0,
+          greenName: 'Green Team',
+          greenScore: 0,
+          greenDq: 0,
+          greenResult: 'I',
+          redName: 'Red Team',
+          redScore: 0,
+          redDq: 0,
+          redResult: 'I',
+          notes: null
+        }
+      }
+
+      res.render('match-override', {
+        url: req.originalUrl,
+        user: req.user,
+        tournamentId: tourn.id,
+        matchId: req.params.matchId,
+        match: matchInfo
+      })
+    }
+  )
+})
+
 router.post('/', function(req, res, next) {
   if (req.body.schoolName) {
     db.get(
@@ -353,6 +414,97 @@ router.post('/', function(req, res, next) {
     )
   } else {
     res.redirect('/' + currentTournament(req.originalUrl).urlName)
+  }
+})
+
+router.post('/override/:matchId' , function(req, res, next) {
+  if (req.body.greenScore && req.body.redScore) {
+    var tourn = currentTournament(req.originalUrl)
+    if (!tourn) {
+      var err = new Error('Not Found');
+      err.status = 404;
+      next(err);
+    }
+
+    var sqlQuery = 'update matches '
+    sqlQuery += 'set played=1'
+    sqlQuery += ', green_score=' + req.body.greenScore
+    sqlQuery += ', red_score=' + req.body.redScore
+
+    if(req.body.greenDq == 'on') {
+      sqlQuery += ', green_dq=1'
+    } else {
+      sqlQuery += ', green_dq=0'
+    }
+
+    if(req.body.redDq == 'on') {
+      sqlQuery += ', red_dq=1'
+    } else {
+      sqlQuery += ', red_dq=0'
+    }
+
+    if(req.body.greenResult == 'on') {
+      sqlQuery += ', green_result=\'P\''
+    } else {
+      sqlQuery += ', green_result=\'N\''
+    }
+
+    if(req.body.redResult == 'on') {
+      sqlQuery += ', red_result=\'P\''
+    } else {
+      sqlQuery += ', red_result=\'N\''
+    }
+
+    var notes = req.body.notes
+    if(!notes.includes('Manually Overriden')) {
+      if(notes) {
+        notes += '\n'
+      }
+      notes += 'Manually Overriden'
+    }
+    sqlQuery += ', notes=\'' + notes + '\''
+
+    sqlQuery += ' where tournament_id=' + tourn.id
+
+
+    db.get(
+      function(err) {
+        if (err)
+          next(err)
+      }
+    ).query(
+      'select match_id from matches where tournament_id = ? and match_number = ?;',
+      [tourn.id, req.params.matchId],
+      function(err, rows) {
+        if (err) {
+          next(err)
+        }
+
+        if(rows[0]) {
+          sqlQuery += ' and match_id=' + rows[0].match_id + ';'
+          console.log(sqlQuery)
+
+          db.get(
+            function(err) {
+              if (err)
+                next(err)
+            }
+          ).query(
+            sqlQuery,
+            function(err, rows) {
+              if (err) {
+                next(err)
+              }
+
+              res.redirect('/' + currentTournament(req.originalUrl).urlName + '/' + req.params.matchId)
+            }
+          )
+        }
+      }
+    )
+
+  } else {
+    next()
   }
 })
 

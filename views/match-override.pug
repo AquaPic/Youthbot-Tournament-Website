@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  if(user)
+    .w3-content.w3-card-2
+      .ybot-theme-seca
+        h3(style='padding-left: 16px;') Override Match Scoring
+      form.w3-container(method='post' name='match-override')
+        .w3-row
+          .w3-half(style='padding-right: 8px;')
+            label #{match.greenName}
+            input.w3-input.w3-border(type='number', name='greenScore', min='0', placeholder='Score', value=match.greenScore, required)
+          .w3-half(style='padding-left: 8px;')
+            label #{match.redName}
+            input.w3-input.w3-border(type='number', name='redScore', min='0', placeholder='Score', value=match.redScore, required)
+        .w3-row
+          .w3-half(style='padding-right: 8px;')
+            p
+              if(match.greenDq === 1)
+                input.w3-check(type='checkbox', name='greenDq' checked)
+              else
+                input.w3-check(type='checkbox', name='greenDq')
+              label.w3-validate Disqualified
+            p
+              if(match.greenResult === 'N')
+                input.w3-check(type='checkbox', name='greenResult')
+              else
+                input.w3-check(type='checkbox', name='greenResult', checked)
+              label.w3-validate Participated
+          .w3-half(style='padding-left: 8px;')
+            p
+              if(match.greenDq === 1)
+                input.w3-check(type='checkbox', name='redDq', checked)
+              else
+                input.w3-check(type='checkbox', name='redDq')
+              label.w3-validate Disqualified
+
+            p
+              if(match.greenResult === 'N')
+                input.w3-check(type='checkbox', name='redResult')
+              else
+                input.w3-check(type='checkbox', name='redResult', checked)
+              label.w3-validate Participated
+        label Notes
+        textarea.w3-input.w3-border(rows='6', name='notes', placeholder='notes')
+        .w3-right(style='margin-top:8px; margin-bottom:12px;')
+          -var matchUrl = url.substring(0, url.lastIndexOf('override')) + matchId
+          a(href=matchUrl style='margin-right:12px;')
+            button.w3-btn.ybot-theme-secc(type="button") Cancel
+          button.w3-btn.ybot-theme-seca(type='submit' style='margin-right:2px;') Submit

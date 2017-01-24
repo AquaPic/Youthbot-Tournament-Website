@@ -1,17 +1,18 @@
 extends layout
 
 block links
-  li
-    a.w3-large(href='#results') Overall
-  li
-    a.w3-large(href='#individualTeam') Individual Team
-  li
-    a.w3-large(href='#autoMode') Auto Mode
-  li
-    a.w3-large(href='#manualMode') Manual Mode
-  if(match.notes !== null)
+  if (match.played === 1)
     li
-      a.w3-large(href='#notes') Notes
+      a.w3-large(href='#results') Overall
+    li
+      a.w3-large(href='#individualTeam') Individual Team
+    li
+      a.w3-large(href='#autoMode') Auto Mode
+    li
+      a.w3-large(href='#manualMode') Manual Mode
+    if(match.notes !== null)
+      li
+        a.w3-large(href='#notes') Notes
 
 block content
   mixin matchElementWhite(name, variable)
@@ -48,10 +49,10 @@ block content
     .w3-content.w3-row(style="margin-top:16px;")
       .w3-col.w3-card-2(style='width: 49%;')
         +matchElementWhite('Penalties', match.greenPenalty)
-        if(match.greenDq === 0)
-          +matchElementGrey('DQ','No')
-        else
+        if(match.greenDq === 1)
           +matchElementGrey('DQ','Yes')
+        else
+          +matchElementGrey('DQ','No')
         if(match.greenResult === 'P')
           +matchElementWhite('Participated','Yes')
         else
@@ -59,10 +60,10 @@ block content
 
       .w3-col.w3-card-2.w3-right(style='width: 49%;')
         +matchElementWhite('Penalties', match.redPenalty)
-        if(match.redDq === 0)
-          +matchElementGrey('DQ','No')
-        else
+        if(match.redDq === 1)
           +matchElementGrey('DQ','Yes')
+        else
+          +matchElementGrey('DQ','No')
         if(match.redResult === 'P')
           +matchElementWhite('Participated','Yes')
         else
@@ -108,3 +109,9 @@ block content
         h4(style="padding-left: 8px") Notes
       .w3-container
         p(style="padding-right:16px; padding-left: 16px;") #{match.notes}
+
+  if(user)
+    .w3-content(style='margin-top: 16px;')
+      -var overrideUrl = url.substring(0,url.lastIndexOf('/')) + '/override/' + matchId
+      a.ybot-no-decoration.w3-right(href=overrideUrl)
+        button.w3-btn.ybot-theme-seca Manually Override
