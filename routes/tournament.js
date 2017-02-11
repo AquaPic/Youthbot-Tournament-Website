@@ -352,11 +352,9 @@ router.post('/', function(req, res, next) {
           next(err)
         }
 
-        if(rows[0]) {
-          for (var row of rows) {
-            if (schools.includes(row.school_name)) {
-              schoolIds[row.school_name] = row.school_id
-            }
+        for (var row of rows) {
+          if (schools.includes(row.school_name)) {
+            schoolIds[row.school_name] = row.school_id
           }
         }
 
@@ -380,8 +378,8 @@ router.post('/', function(req, res, next) {
             }
 
             sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
-            sqlQuery += (schoolIds[schools[red]] + ', \'N\', ')
-            sqlQuery += (schoolIds[schools[green]] + ', \'N\')')
+            sqlQuery += (schoolIds[schools[red]] + ', \'I\', ')
+            sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
             ++matchNumber
           }
 
@@ -393,8 +391,8 @@ router.post('/', function(req, res, next) {
           }
 
           sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
-          sqlQuery += (schoolIds[schools[red]] + ', \'N\', ')
-          sqlQuery += (schoolIds[schools[green]] + ', \'N\')')
+          sqlQuery += (schoolIds[schools[red]] + ', \'I\', ')
+          sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
           ++matchNumber
         }
 

@@ -17,7 +17,10 @@ html
       .w3-container.w3-padding-0
         ul.w3-navbar.ybot-theme-pri
           li
-            a.w3-large(href='/' style='padding-right:70px') Standings
+            if(user)
+              a.w3-large(href='/logout' style='padding-right:99px') Logout
+            else
+              a.w3-large(href='/login' style='padding-right:112px') Login
           li.w3-right
             a.w3-large(href='javascript:void(0)', onclick='sidebar_close()') x
 

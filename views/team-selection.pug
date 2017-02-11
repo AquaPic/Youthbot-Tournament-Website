@@ -6,6 +6,10 @@ block content
     -var scriptPath = 'team_selection_click(' + id + ')'
     li.ybot-pointer(id=fullId onclick=scriptPath)= name
 
+  if(user == undefined)
+    .w3-content.w3-panel.w3-sand.w3-leftbar.w3-border-amber
+      p You must be logged in to generate a match
+
   .w3-content.w3-card-2
     .ybot-theme-seca
       .w3-row

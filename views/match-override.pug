@@ -29,14 +29,14 @@ block content
               label.w3-validate Participated
           .w3-half(style='padding-left: 8px;')
             p
-              if(match.greenDq === 1)
+              if(match.redDq === 1)
                 input.w3-check(type='checkbox', name='redDq', checked)
               else
                 input.w3-check(type='checkbox', name='redDq')
               label.w3-validate Disqualified
 
             p
-              if(match.greenResult === 'N')
+              if(match.redResult === 'N')
                 input.w3-check(type='checkbox', name='redResult')
               else
                 input.w3-check(type='checkbox', name='redResult', checked)

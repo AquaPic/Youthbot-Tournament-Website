@@ -4,12 +4,6 @@ block links
   if (match.played === 1)
     li
       a.w3-large(href='#results') Overall
-    li
-      a.w3-large(href='#individualTeam') Individual Team
-    li
-      a.w3-large(href='#autoMode') Auto Mode
-    li
-      a.w3-large(href='#manualMode') Manual Mode
     if(match.notes !== null)
       li
         a.w3-large(href='#notes') Notes
@@ -115,3 +109,6 @@ block content
       -var overrideUrl = url.substring(0,url.lastIndexOf('/')) + '/override/' + matchId
       a.ybot-no-decoration.w3-right(href=overrideUrl)
         button.w3-btn.ybot-theme-seca Manually Override
+  else
+    .w3-content.w3-panel.w3-sand.w3-leftbar.w3-border-amber
+      p You must be logged in to override the score of a match

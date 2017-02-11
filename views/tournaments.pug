@@ -1,11 +1,5 @@
 extends layout
 
-block links
-  li
-    a.w3-large(href='#matches') Matches
-  //-li
-    a.w3-large(href='#standings') Standings
-
 block content
   -var matchesPerRound = matches['matchesPerRound']
   -var roundCount = matches['roundCount']
@@ -95,6 +89,3 @@ block content
           +columns(intermatch, round)
         -}
     -}
-
-  #standings.ybot-anchor
-  div

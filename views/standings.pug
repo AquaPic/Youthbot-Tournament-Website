@@ -1,0 +1,33 @@
+extends layout
+
+block links
+  li
+    a.w3-large(href='/competition1') 1st Competition
+  li
+    a.w3-large(href='/competition2') 2nd Competition
+
+block content
+    .w3-content
+      h3 YouthBOT 2017 Standings
+      .w3-card-2
+        table.w3-table
+          tr.ybot-theme-seca
+            th Rank
+            th Team
+            th Average Score
+            th Highest Score
+            th Matches Played
+          -for (var i=0; i<standings.length; i+=2) {
+            tr
+              td= i+1
+              td= standings[i].team
+              td= standings[i].score
+              td= standings[i].highest
+              td= standings[i].matches_played
+            tr.ybot-theme-secb
+              td= i+2
+              td= standings[i+1].team
+              td= standings[i+1].score
+              td= standings[i+1].highest
+              td= standings[i+1].matches_played
+          -}

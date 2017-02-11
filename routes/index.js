@@ -1,13 +1,35 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var db = require('../db')
 
 router.get('/', function(req, res, next) {
-  res.render('index', {
-    url: req.originalUrl,
-    user: req.user,
-    title: 'YouthBOT 2017 Standings'
-  });
+  db.get(
+    function(err) {
+      if (err)
+        next(err)
+    }
+  ).query(
+    'select * from standings_by_score;',
+    function(err, rows) {
+      if (err) {
+        next(err)
+      }
+
+      if(rows[0]) {
+        res.render('standings', {
+          url: req.originalUrl,
+          user: req.user,
+          standings: rows
+        });
+      } else {
+        res.render('index', {
+          url: req.originalUrl,
+          user: req.user,
+        });
+      }
+    }
+  )
 });
 
 router.get('/login', function(req, res, next) {
@@ -22,7 +44,8 @@ router.get('/login', function(req, res, next) {
 
   res.render('login', {
     url: req.originalUrl,
-    user: req.user
+    user: req.user,
+    bounceBack: bounce
   })
 })
 
