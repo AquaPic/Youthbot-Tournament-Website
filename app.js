@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
+var morgan = require('morgan');
 
 var db = require('./db');
 var config = require('./config');
@@ -37,7 +38,6 @@ passport.deserializeUser(function(id, done) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -50,6 +50,8 @@ app.use(session({
     saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(morgan('combined'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
