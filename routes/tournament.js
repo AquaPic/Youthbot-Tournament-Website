@@ -65,7 +65,7 @@ router.get('/', function(req, res, next) {
 
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else if (tourn.id === 2) {
+  } else if ((tourn.id === 2) || (tourn.id === 3)) {
     db.get(
       function(err) {
         if (err)
@@ -117,16 +117,14 @@ router.get('/', function(req, res, next) {
             tournamentName: tourn.urlName,
             matches: matches
           })
-        }
-
-        if (!matchIniatized) {
+        } else {
           db.get(
             function(err) {
               if (err)
                 next(err)
             }
           ).query(
-            'select school_name from schools where participating=1;',
+            'select * from standings_by_score;',
             function(err, rows) {
               if (err) {
                 next(err)
@@ -134,18 +132,15 @@ router.get('/', function(req, res, next) {
 
               var teams = new Array();
               if(rows[0]) {
-                for (var row of rows) {
-                  teams.push(row.school_name)
-                }
+                res.render('team-selection', {
+                  url: req.originalUrl,
+                  user: req.user,
+                  title: tourn.name,
+                  teams: rows
+                })
+              } else {
+                res.render('index', { url: req.originalUrl, user: req.user, title: tourn.name })
               }
-
-              teams.sort()
-              res.render('team-selection', {
-                url: req.originalUrl,
-                user: req.user,
-                title: tourn.name,
-                teams: teams
-              })
             }
           )
         }
@@ -334,7 +329,13 @@ router.post('/', function(req, res, next) {
       next(err);
     }
 
+    console.log(tourn.name + ": " + tourn.id)
+
     var schools = req.body.schools
+    for (var school of schools) {
+      console.log(school)
+    }
+
     if (schools.length % 2 === 1) {
       schools.splice(0, 0, 'Bye')
     }
@@ -395,6 +396,8 @@ router.post('/', function(req, res, next) {
           sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
           ++matchNumber
         }
+
+        console.log(sqlQuery);
 
         db.get(
           function(err) {

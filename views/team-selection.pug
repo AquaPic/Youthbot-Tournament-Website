@@ -1,14 +1,29 @@
 extends layout
 
+block additionalHeader
+  script(src='http://rubaxa.github.io/Sortable/Sortable.js')
+
 block content
-  mixin teamElement(id, name)
-    -var fullId = 'team' + id
+  mixin teamElement(id, name, avg, highest, played)
+    -var teamId = 'team' + id
+    -var clickId = 'click' + id
     -var scriptPath = 'team_selection_click(' + id + ')'
-    li.ybot-pointer(id=fullId onclick=scriptPath)= name
+    li(id=teamId)
+      .w3-row
+        .w3-col(style='width: 30px')
+          i.fa.fa-check-circle-o.fa-lg(id=clickId aria-hidden='true' style='cursor: pointer;' onclick=scriptPath)
+        .w3-right
+          i.fa.fa-sort.fa-lg(style='padding-top: 5px; margin-right: 12px; cursor: grab;' aria-hidden='true')
+        .w3-rest
+          #name.w3-col.s6= name
+          .w3-col.s2= avg
+          .w3-col.s2= highest
+          .w3-col.s2= played
+
 
   if(user == undefined)
     .w3-content.w3-panel.w3-sand.w3-leftbar.w3-border-amber
-      p You must be logged in to generate a match
+      p You must be logged in to generate a tournament
 
   .w3-content.w3-card-2
     .ybot-theme-seca
@@ -27,12 +42,24 @@ block content
         .w3-rest
           input.w3-input.w3-border(type='text' name='schoolName')
 
-    ul.w3-ul.ybot-theme-secb
+    ul#schoolList.w3-ul.ybot-theme-secb
+      li
+        .w3-row(style='padding-right: 23px; padding-left: 30px')
+          #name.w3-col.s6 Team
+          .w3-col.s2  Average Score
+          .w3-col.s2 Highest Score
+          .w3-col.s2 Games Played
       -for (var i=0; i<teams.length; ++i) {
-        +teamElement(i, teams[i])
+        +teamElement(i, teams[i].team, teams[i].score, teams[i].highest, teams[i].matches_played)
       -}
 
   if(user)
     .w3-content
       a.ybot-no-decoration.w3-right(href='javascript:void(0)', onclick='send_team_post()')
         button.w3-btn.ybot-theme-seca(style='margin-top: 12px;') Generate Matches
+
+  script(type='text/javascript').
+    Sortable.create(schoolList, {
+      handle: '.fa-sort',
+      animation: 150
+    });

@@ -19,12 +19,14 @@ function show_add_team() {
 }
 
 function team_selection_click(number) {
-  var elementId = 'team' + number
+  var elementId = 'click' + number
   var element = document.getElementById(elementId)
-  if (element.className.match(/(?:^|\s)ybot-theme-secc(?!\S)/)) {
-    element.classList.remove ('ybot-theme-secc')
+  if (element.classList.contains('fa-check-circle-o')) {
+    element.classList.remove ('fa-check-circle-o')
+    element.classList.add ('fa-circle-o')
   } else {
-    element.classList.add ('ybot-theme-secc')
+    element.classList.remove ('fa-circle-o')
+    element.classList.add ('fa-check-circle-o')
   }
 }
 
@@ -33,13 +35,17 @@ function send_team_post() {
   var schoolsInMatch = {}
   schoolsInMatch['schools'] = []
   for (let element of listElements) {
-    if ((element.id.includes ('team')) && (element.className.match(/(?:^|\s)ybot-theme-secc(?!\S)/))) {
-      schoolsInMatch['schools'].push(element.textContent)
+    if (element.id.includes('team')) {
+      var id = element.id.substring(element.id.indexOf('team') + 4, element.id.length)
+      if (element.querySelector('#click' + id).classList.contains('fa-check-circle-o')) {
+        var name = element.querySelector('#name')
+        schoolsInMatch['schools'].push(name.textContent)
+      }
     }
   }
 
   var xhr = new XMLHttpRequest()
-  xhr.open("POST", '/competition1', true)
+  xhr.open("POST", window.location.pathname, true)
   xhr.setRequestHeader('Content-Type', 'application/json')
   xhr.onreadystatechange = function () {
     if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
