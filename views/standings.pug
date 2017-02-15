@@ -24,10 +24,11 @@ block content
               td= standings[i].score
               td= standings[i].highest
               td= standings[i].matches_played
-            tr.ybot-theme-secb
-              td= i+2
-              td= standings[i+1].team
-              td= standings[i+1].score
-              td= standings[i+1].highest
-              td= standings[i+1].matches_played
+            if (standings[i+1])
+              tr.ybot-theme-secb
+                td= i+2
+                td= standings[i+1].team
+                td= standings[i+1].score
+                td= standings[i+1].highest
+                td= standings[i+1].matches_played
           -}
