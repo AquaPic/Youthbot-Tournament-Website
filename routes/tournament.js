@@ -65,7 +65,7 @@ router.get('/', function(req, res, next) {
 
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else if ((tourn.id === 2) || (tourn.id === 3)) {
+  } else if ((tourn.id >= 2) && (tourn.id <= 4)) {
     db.get(
       function(err) {
         if (err)
@@ -94,6 +94,8 @@ router.get('/', function(req, res, next) {
             if (!schools.includes(row.red_team)) {
               schools.push (row.red_team)
             }
+
+            console.log('adding match ' + row.match_id)
 
             matches[row.match_id] = {
               greenTeam: row.green_team,
