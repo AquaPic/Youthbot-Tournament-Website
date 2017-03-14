@@ -87,25 +87,25 @@ router.get('/', function(req, res, next) {
           matches['roundCount'] = 0
 
           for (var row of rows) {
-            if (!schools.includes(row.green_team)) {
-              schools.push (row.green_team)
-            }
+            if (row.match_id !== 0) { // hack to prevent display issues if match 0 is accidently scored
+              if (!schools.includes(row.green_team)) {
+                schools.push (row.green_team)
+              }
 
-            if (!schools.includes(row.red_team)) {
-              schools.push (row.red_team)
-            }
+              if (!schools.includes(row.red_team)) {
+                schools.push (row.red_team)
+              }
 
-            console.log('adding match ' + row.match_id)
-
-            matches[row.match_id] = {
-              greenTeam: row.green_team,
-              greenScore: row.green_score,
-              greenDq: row.green_dq,
-              greenResult: row.green_result,
-              redTeam: row.red_team,
-              redScore: row.red_score,
-              redDq: row.red_dq,
-              redResult: row.red_result
+              matches[row.match_id] = {
+                greenTeam: row.green_team,
+                greenScore: row.green_score,
+                greenDq: row.green_dq,
+                greenResult: row.green_result,
+                redTeam: row.red_team,
+                redScore: row.red_score,
+                redDq: row.red_dq,
+                redResult: row.red_result
+              }
             }
           }
 
