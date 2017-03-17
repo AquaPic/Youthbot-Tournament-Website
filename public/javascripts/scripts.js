@@ -54,3 +54,16 @@ function send_team_post() {
   };
   xhr.send(JSON.stringify(schoolsInMatch))
 }
+
+
+function delete_teams_post() {
+  var xhr = new XMLHttpRequest()
+  xhr.open("POST", window.location.pathname, true)
+  xhr.setRequestHeader('Content-Type', 'application/json')
+  xhr.onreadystatechange = function () {
+    if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      window.location.reload()
+    }
+  };
+  xhr.send(JSON.stringify({action: 'delete' }))
+}

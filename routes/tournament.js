@@ -323,6 +323,90 @@ router.post('/', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
+  if (req.body.action) {
+    console.log('request to delete everything');
+
+    var tourn = currentTournament(req.originalUrl)
+    if (!tourn) {
+      var err = new Error('Not Found');
+      err.status = 404;
+      next(err);
+    }
+
+    db.get(
+      function(err) {
+        if (err)
+          next(err)
+      }
+    ).query(
+      'select * from matches where tournament_id = ?',
+      tourn.id,
+      function(err, rows) {
+        if (err) {
+          next(err)
+        }
+
+        deleteMatches = false
+        startIndex = -1
+        endIndex = -1
+        if (rows) {
+          deleteMatches = true
+          startIndex = rows[0].match_id
+          endIndex = rows[rows.length - 1].match_id
+          console.log('startIndex = ' + startIndex);
+          console.log('endIndex = ' + endIndex);
+
+          for (var row of rows) {
+            if (row.played == 1) {
+              deleteMatches = false
+            }
+          }
+        }
+
+        if (deleteMatches) {
+          db.get(
+            function(err) {
+              if (err)
+                next(err)
+            }
+          ).query(
+            'delete from matches where match_id between ? and ?;',
+            [startIndex, endIndex],
+            function(err, rows) {
+              if (err) {
+                next(err)
+              }
+              console.log('matches deleted');
+              db.get(
+                function(err) {
+                  if (err)
+                    next(err)
+                }
+              ).query(
+                'alter table matches auto_increment=?;',
+                startIndex,
+                function(err, rows) {
+                  if (err) {
+                    next(err)
+                  }
+                  res.redirect('/' + currentTournament(req.originalUrl).urlName)
+                  console.log('auto increment reset');
+                }
+              )
+            }
+          )
+        } else {
+          console.log('can\'t delete matches');
+          res.redirect('/' + currentTournament(req.originalUrl).urlName)
+        }
+      }
+    )
+  } else {
+    next()
+  }
+})
+
+router.post('/', function(req, res, next) {
   if (req.body.schools) {
     var tourn = currentTournament(req.originalUrl)
     if (!tourn) {
