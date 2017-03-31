@@ -3,20 +3,28 @@ var tunnel = require('tunnel-ssh')
 var async = require('async')
 var config = require('./config')
 
+exports.MODE_TEST = 'mode-test'
+exports.MODE_PRODUCTION = 'mode-production'
+
 var state = {
-  pool: null
+  pool: null,
+  mode: null
 }
 
-exports.connect = function(useSsh, done) {
-  if (useSsh) {
-    tunnel(config.settings.ssh, function(err, server) {
-      if (err)
-        return done (err)
-    })
-
-    state.pool = mysql.createPool(config.settings.sqlTunnel)
+exports.connect = function(mode, useSsh, done) {
+  if (mode === exports.MODE_TEST) {
+    state.pool = mysql.createPool(config.settings.sqlTest)
   } else {
-    state.pool = mysql.createPool(config.settings.sqlDirect)
+    if (useSsh) {
+      tunnel(config.settings.ssh, function(err, server) {
+        if (err)
+          return done (err)
+      })
+
+      state.pool = mysql.createPool(config.settings.sqlTunnel)
+    } else {
+      state.pool = mysql.createPool(config.settings.sqlDirect)
+    }
   }
 
   done(null)

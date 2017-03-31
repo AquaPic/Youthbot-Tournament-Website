@@ -84,7 +84,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-db.connect(false, function(err) {
+db.connect(db.MODE_TEST, false, function(err) {
   if(err)
     next(err)
 
