@@ -65,7 +65,7 @@ router.get('/', function(req, res, next) {
 
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else if ((tourn.id >= 2) && (tourn.id <= 4)) {
+  } else if ((tourn.id >= 2) && (tourn.id <= 5)) {
     db.get(
       function(err) {
         if (err)
@@ -109,16 +109,29 @@ router.get('/', function(req, res, next) {
             }
           }
 
-          var schoolsParticipating = schools.length
-          matches['matchesPerRound'] = schoolsParticipating / 2
-          matches['roundCount'] = schoolsParticipating - 1
+          if (tourn.id === 5) {
+            var schoolsParticipating = schools.length - 4
+            matches['matchesPerRound'] = schoolsParticipating / 2
+            matches['roundCount'] = schoolsParticipating - 1
 
-          res.render('tournaments', {
-            url: req.originalUrl,
-            user: req.user,
-            tournamentName: tourn.urlName,
-            matches: matches
-          })
+            res.render('championship', {
+              url: req.originalUrl,
+              user: req.user,
+              tournamentName: tourn.urlName,
+              matches: matches
+            })
+          } else {
+            var schoolsParticipating = schools.length - 4
+            matches['matchesPerRound'] = schoolsParticipating / 2
+            matches['roundCount'] = schoolsParticipating - 1
+
+            res.render('tournaments', {
+              url: req.originalUrl,
+              user: req.user,
+              tournamentName: tourn.urlName,
+              matches: matches
+            })
+          }
         } else {
           db.get(
             function(err) {
@@ -324,8 +337,6 @@ router.post('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
   if (req.body.action) {
-    console.log('request to delete everything');
-
     var tourn = currentTournament(req.originalUrl)
     if (!tourn) {
       var err = new Error('Not Found');
@@ -353,8 +364,6 @@ router.post('/', function(req, res, next) {
           deleteMatches = true
           startIndex = rows[0].match_id
           endIndex = rows[rows.length - 1].match_id
-          console.log('startIndex = ' + startIndex);
-          console.log('endIndex = ' + endIndex);
 
           for (var row of rows) {
             if (row.played == 1) {
@@ -376,7 +385,7 @@ router.post('/', function(req, res, next) {
               if (err) {
                 next(err)
               }
-              console.log('matches deleted');
+
               db.get(
                 function(err) {
                   if (err)
@@ -415,12 +424,7 @@ router.post('/', function(req, res, next) {
       next(err);
     }
 
-    console.log(tourn.name + ": " + tourn.id)
-
     var schools = req.body.schools
-    for (var school of schools) {
-      console.log(school)
-    }
 
     if (schools.length % 2 === 1) {
       schools.splice(0, 0, 'Bye')
@@ -445,20 +449,130 @@ router.post('/', function(req, res, next) {
           }
         }
 
-        var schoolsParticipating = schools.length
-        var matchesPerRound = schoolsParticipating / 2
-        var roundCount = schoolsParticipating - 1
+        if (tourn.id === 5) { // only works for 2017 Championship
+          var sqlQuery = 'insert into matches '
+          sqlQuery += '(tournament_id, match_number, played, '
+          sqlQuery += 'red_team, red_result, green_team, green_result) values '
 
-        var sqlQuery = 'insert into matches '
-        sqlQuery += '(tournament_id, match_number, played, '
-        sqlQuery += 'red_team, red_result, green_team, green_result) values '
+          var matchNumber = 1
+          start = 0;
+          if (schools[0] === 'Bye') {
+            start = 1
+          }
 
-        var matchNumber = 1
+          for (var round = 0; round < 6; ++round) {
+            var green1, red1, green2, red2
+            if (round === 0 || round === 3) {
+              green1 = 0 + start
+              red1 = 3 + start
+              green2 = 1 + start
+              red2 = 2 + start
+            } else if (round === 1 || round === 4) {
+              green1 = 2 + start
+              red1 = 0 + start
+              green2 = 3 + start
+              red2 = 1 + start
+            } else {
+              green1 = 0 + start
+              red1 = 1 + start
+              green2 = 2 + start
+              red2 = 3 + start
+            }
 
-        for (var round = 0; round < roundCount; ++round) {
-          for (var intermatch = 0; intermatch < matchesPerRound - 1; ++intermatch) {
-            var green = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
-            var red = indexLimiter(green + (intermatch * 2) + 1, schoolsParticipating)
+            if (sqlQuery.endsWith (')')) {
+              sqlQuery += (', ')
+            }
+
+            sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+            sqlQuery += (schoolIds[schools[red1]] + ', \'I\', ')
+            sqlQuery += (schoolIds[schools[green1]] + ', \'I\'), ')
+            ++matchNumber
+
+            sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+            sqlQuery += (schoolIds[schools[red2]] + ', \'I\', ')
+            sqlQuery += (schoolIds[schools[green2]] + ', \'I\')')
+            ++matchNumber
+          }
+
+          var remainingSchools = []
+          for (var i = 4 + start; i < schools.length; ++i) {
+            remainingSchools.push(schools[i])
+          }
+
+          if (remainingSchools.length % 2 === 1) {
+            remainingSchools.splice(0, 0, 'Bye')
+          }
+
+          var schoolsParticipating = remainingSchools.length
+          var matchesPerRound = schoolsParticipating / 2
+          var roundCount = schoolsParticipating - 1
+
+          for (var round = 0; round < roundCount; ++round) {
+            for (var intermatch = 0; intermatch < matchesPerRound - 1; ++intermatch) {
+              var green = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
+              var red = indexLimiter(green + (intermatch * 2) + 1, schoolsParticipating)
+
+              sqlQuery += (', (' + tourn.id + ', ' + matchNumber + ', 0, ')
+              sqlQuery += (schoolIds[remainingSchools[red]] + ', \'I\', ')
+              sqlQuery += (schoolIds[remainingSchools[green]] + ', \'I\')')
+              ++matchNumber
+            }
+
+            var red = 0
+            var green = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
+
+            if (sqlQuery.endsWith (')')) {
+              sqlQuery += (', ')
+            }
+
+            sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+            sqlQuery += (schoolIds[remainingSchools[red]] + ', \'I\', ')
+            sqlQuery += (schoolIds[remainingSchools[green]] + ', \'I\')')
+            ++matchNumber
+          }
+
+          console.log(sqlQuery);
+
+          db.get(
+            function(err) {
+              if (err)
+                next(err)
+            }
+          ).query(sqlQuery, function(err, rows) {
+            if (err) {
+              next(err)
+            }
+
+            res.redirect('/' + currentTournament(req.originalUrl).urlName)
+          })
+        } else { // general match generation
+          var schoolsParticipating = schools.length
+          var matchesPerRound = schoolsParticipating / 2
+          var roundCount = schoolsParticipating - 1
+
+          var sqlQuery = 'insert into matches '
+          sqlQuery += '(tournament_id, match_number, played, '
+          sqlQuery += 'red_team, red_result, green_team, green_result) values '
+
+          var matchNumber = 1
+
+          for (var round = 0; round < roundCount; ++round) {
+            for (var intermatch = 0; intermatch < matchesPerRound - 1; ++intermatch) {
+              var green = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
+              var red = indexLimiter(green + (intermatch * 2) + 1, schoolsParticipating)
+
+              if (sqlQuery.endsWith (')')) {
+                sqlQuery += (', ')
+              }
+
+              sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+              sqlQuery += (schoolIds[schools[red]] + ', \'I\', ')
+              sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
+              ++matchNumber
+            }
+
+            var red = 0
+            var green = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
 
             if (sqlQuery.endsWith (')')) {
               sqlQuery += (', ')
@@ -470,33 +584,19 @@ router.post('/', function(req, res, next) {
             ++matchNumber
           }
 
-          var red = 0
-          var green = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
-
-          if (sqlQuery.endsWith (')')) {
-            sqlQuery += (', ')
-          }
-
-          sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
-          sqlQuery += (schoolIds[schools[red]] + ', \'I\', ')
-          sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
-          ++matchNumber
-        }
-
-        console.log(sqlQuery);
-
-        db.get(
-          function(err) {
-            if (err)
+          db.get(
+            function(err) {
+              if (err)
+                next(err)
+            }
+          ).query(sqlQuery, function(err, rows) {
+            if (err) {
               next(err)
-          }
-        ).query(sqlQuery, function(err, rows) {
-          if (err) {
-            next(err)
-          }
+            }
 
-          res.redirect('/' + currentTournament(req.originalUrl).urlName)
-        })
+            res.redirect('/' + currentTournament(req.originalUrl).urlName)
+          })
+        }
       }
     )
   } else {

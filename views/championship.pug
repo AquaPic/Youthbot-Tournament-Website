@@ -1,0 +1,181 @@
+extends layout
+
+block links
+  li
+    a.w3-large(href='#matches') Round Robin
+  li
+    a.w3-large(href='#finals') Finals
+
+block content
+  -var offset = 12
+  -var matchesPerRound = matches['matchesPerRound']
+  -var roundCount = matches['roundCount']
+  mixin columns(intermatch, round)
+    -var matchId = matchesPerRound * (round - 1) + intermatch
+    -var matchString = '/' + tournamentName + '/' + matchId
+    .w3-col.l2
+      if(matches[matchId])
+        a.ybot-no-decoration(href= matchString)
+          .w3-card-2.w3-hover-shadow
+            .w3-container
+              p
+                span.w3-text-green= matches[matchId].greenTeam
+                span.w3-right= matches[matchId].greenScore
+            .w3-container.ybot-theme-secb
+              p
+                span.w3-text-red= matches[matchId].redTeam
+                span.w3-right= matches[matchId].redScore
+      else
+        .w3-card.w3-opacity
+          .w3-container
+            p
+              span.w3-text-green.w3-left-align Green
+              span.w3-right 0
+          .w3-container.ybot-theme-secb
+            p
+              span.w3-text-red.w3-left-align Red
+              span.w3-right 0
+
+  #matches.ybot-anchor
+  h3(style="margin-top:0px;") Top 4 Teams Double Round Robin
+  .w3-row.ybot-theme-seca.w3-center
+    -for (var i=1; i<=6; ++i) {
+      .w3-col.l2
+        h4 Round #{i}
+    -}
+  
+  -for (var intermatch=1; intermatch<=2; ++intermatch) {
+    .w3-row-padding(style="margin-top:12px;")
+      -for (var round=1; round<=6; ++round) {
+        +columns(intermatch, round)
+      -}
+  -}
+  
+  -var maxRounds = 0
+  -if (roundCount >= 6) {
+  -  maxRounds = 6
+  -} else {
+  -  maxRounds = roundCount
+  -}
+  
+  #remainingroundrobin.ybot-anchor
+  h3(style="margin-top:24px;") Remaining Teams Round Robin
+  .w3-row.ybot-theme-seca.w3-center
+    -for (var i=1; i<=maxRounds; ++i) {
+      .w3-col.l2
+        h4 Round #{i}
+    -}
+
+  -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+    .w3-row-padding(style="margin-top:12px;")
+      -for (var round=1; round<=maxRounds; ++round) {
+        +columns(intermatch + offset, round)
+      -}
+  -}
+
+  if (roundCount > 6)
+    -if (roundCount >= 12) {
+    -  maxRounds = 12
+    -} else {
+    -  maxRounds = roundCount
+    -}
+
+    .w3-row.ybot-theme-seca.w3-center
+      -for (var i=7; i<=maxRounds; ++i) {
+        .w3-col.l2
+          h4 Round #{i}
+      -}
+
+    -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+      .w3-row-padding(style="margin-top:12px;")
+        -for (var round=7; round<=maxRounds; ++round) {
+          +columns(intermatch + offset, round)
+        -}
+    -}
+
+  if (roundCount > 12)
+    -if (roundCount >= 18) {
+    -  maxRounds = 18
+    -} else {
+    -  maxRounds = roundCount
+    -}
+
+    .w3-row.ybot-theme-seca.w3-center
+      -for (var i=13; i<=maxRounds; ++i) {
+        .w3-col.l2
+          h4 Round #{i}
+      -}
+
+    -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+      .w3-row-padding(style="margin-top:12px;")
+        -for (var round=13; round<=maxRounds; ++round) {
+          +columns(intermatch + offset, round)
+        -}
+    -}
+        
+  mixin bracket(intermatch, round)
+    //- attributes == {class: "w3-col l2"}
+    -var matchId = 100 + (round * 10) + intermatch
+    -var matchString = '/' + tournamentName + '/' + matchId
+    div(class!=attributes.class)
+      if(matches[matchId])
+        a.ybot-no-decoration(href= matchString)
+          .w3-card-2.w3-hover-shadow
+            .w3-container
+              p
+                span= matches[matchId].greenTeam
+                span.w3-right Avg: #{matches[matchId].greenScore}
+            .w3-container.ybot-theme-secb
+              p
+                span A: #{matches[matchId].greenScore}
+                span.w3-right B: #{matches[matchId].redScore}
+      else
+        .w3-card.w3-opacity
+          .w3-container
+            p
+              span Team
+              span.w3-right Avg: 0
+          .w3-container.ybot-theme-secb
+            p
+              span A: 0
+              span.w3-right B: 0
+              
+  #finals.ybot-anchor
+  h3(style="margin-top:24px;") Finals
+  .w3-row.ybot-theme-seca
+    h4(style="margin-left:12px;") Quarter Final
+      
+  .w3-row-padding(style="margin-top:12px;")
+    -var round = 1
+    -for (var intermatch=1; intermatch<=6; ++intermatch) {
+      +bracket(intermatch, round)(class="w3-col l2")
+    -}
+  
+  .w3-row.ybot-theme-seca(style="margin-top:12px;")
+    h4(style="margin-left:12px;") Semi Final
+      
+  .w3-row-padding(style="margin-top:12px;")
+    -round = 2 
+    -for (var intermatch=1; intermatch<=4; ++intermatch) {
+      +bracket(intermatch, round)(class="w3-col l3")
+    -} 
+  
+  .w3-row(style="margin-top:12px;")
+    .w3-col.ybot-theme-seca(style='width: 49%;')
+      h4(style="margin-left:12px;") Championship
+    .w3-col.ybot-theme-seca.w3-right(style='width: 49%;')
+      h4(style="margin-left:12px;") Third Place
+  
+  .w3-col(style='width: 49%;')
+    .w3-row-padding(style="margin-top:12px;")
+      +bracket(1, 3)(class="w3-col l6")
+      +bracket(2, 3)(class="w3-col l6")
+  .w3-col.w3-right(style='width: 49%;')
+    .w3-row-padding(style="margin-top:12px;")
+      +bracket(3, 3)(class="w3-col l6")
+      +bracket(4, 3)(class="w3-col l6")
+  
+  if (user)
+    div(style="margin-top:12px; margin-left:12px")
+      a.ybot-no-decoration(href='javascript:void(0)', onclick='delete_teams_post()')
+        button.w3-btn.ybot-theme-pri(style='margin-top: 12px;') Delete Matches
