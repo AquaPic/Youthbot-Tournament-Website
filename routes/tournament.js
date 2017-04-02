@@ -121,7 +121,7 @@ router.get('/', function(req, res, next) {
               matches: matches
             })
           } else {
-            var schoolsParticipating = schools.length - 4
+            var schoolsParticipating = schools.length
             matches['matchesPerRound'] = schoolsParticipating / 2
             matches['roundCount'] = schoolsParticipating - 1
 
