@@ -89,11 +89,15 @@ router.get('/', function(req, res, next) {
           for (var row of rows) {
             if (row.match_id !== 0) { // hack to prevent display issues if match 0 is accidently scored
               if (!schools.includes(row.green_team)) {
-                schools.push (row.green_team)
+                if (row.green_team != null) {
+                  schools.push (row.green_team)
+                }
               }
 
               if (!schools.includes(row.red_team)) {
-                schools.push (row.red_team)
+                if (row.red_team != null) {
+                  schools.push (row.red_team)
+                }
               }
 
               matches[row.match_id] = {
@@ -110,9 +114,7 @@ router.get('/', function(req, res, next) {
           }
 
           if (tourn.id === 5) {
-            var schoolsParticipating = schools.length - 4
-            matches['matchesPerRound'] = schoolsParticipating / 2
-            matches['roundCount'] = schoolsParticipating - 1
+            matches['numSchools'] = schools.length
 
             res.render('championship', {
               url: req.originalUrl,
@@ -449,86 +451,64 @@ router.post('/', function(req, res, next) {
           }
         }
 
-        if (tourn.id === 5) { // only works for 2017 Championship
+        if (tourn.id === 5) { // only works for 2017 Championship and 7 teams
+          if (schools[0] === 'Bye') {
+            schools.splice(0, 1)  // remove 'Bye' from the beginning
+            schools.push('Bye')   // and append to the end
+          }
+
+          var order = []
+          var numSchools = schools.length
+          var matches = numSchools / 2
+          for (var i = 0; i < matches - 1 ; ++i) {
+            var team1 = numSchools / 2 - 1 - i, numSchools
+            var team2 = team1 + (i * 2) + 1, numSchools
+            order.push(schools[team1])
+            order.push(schools[team2])
+          }
+
+          if (schools[numSchools - 1] === 'Bye') {
+            order.splice(0,0, schools[0])
+            numSchools = numSchools - 1
+          } else {
+            order.push(schools[0])
+            order.push(schools[numSchools - 1])
+          }
+
           var sqlQuery = 'insert into matches '
           sqlQuery += '(tournament_id, match_number, played, '
-          sqlQuery += 'red_team, red_result, green_team, green_result) values '
+          sqlQuery += 'green_team, green_result) values '
 
-          var matchNumber = 1
-          start = 0;
-          if (schools[0] === 'Bye') {
-            start = 1
-          }
-
-          for (var round = 0; round < 6; ++round) {
-            var green1, red1, green2, red2
-            if (round === 0 || round === 3) {
-              green1 = 0 + start
-              red1 = 3 + start
-              green2 = 1 + start
-              red2 = 2 + start
-            } else if (round === 1 || round === 4) {
-              green1 = 2 + start
-              red1 = 0 + start
-              green2 = 3 + start
-              red2 = 1 + start
-            } else {
-              green1 = 0 + start
-              red1 = 1 + start
-              green2 = 2 + start
-              red2 = 3 + start
+          for (var i = 0; i < numSchools * 2; ++i) {
+            var index = i
+            if (index >= numSchools) {
+              index = index - numSchools
             }
 
             if (sqlQuery.endsWith (')')) {
               sqlQuery += (', ')
             }
 
-            sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
-            sqlQuery += (schoolIds[schools[red1]] + ', \'I\', ')
-            sqlQuery += (schoolIds[schools[green1]] + ', \'I\'), ')
-            ++matchNumber
-
-            sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
-            sqlQuery += (schoolIds[schools[red2]] + ', \'I\', ')
-            sqlQuery += (schoolIds[schools[green2]] + ', \'I\')')
-            ++matchNumber
+            sqlQuery += ('(' + tourn.id + ', ' + (i + 1) + ', 0, ')
+            sqlQuery += (schoolIds[order[index]] + ', \'I\')')
           }
 
-          var remainingSchools = []
-          for (var i = 4 + start; i < schools.length; ++i) {
-            remainingSchools.push(schools[i])
-          }
-
-          if (remainingSchools.length % 2 === 1) {
-            remainingSchools.splice(0, 0, 'Bye')
-          }
-
-          var schoolsParticipating = remainingSchools.length
-          var matchesPerRound = schoolsParticipating / 2
-          var roundCount = schoolsParticipating - 1
-
-          for (var round = 0; round < roundCount; ++round) {
-            for (var intermatch = 0; intermatch < matchesPerRound - 1; ++intermatch) {
-              var green = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
-              var red = indexLimiter(green + (intermatch * 2) + 1, schoolsParticipating)
-
-              sqlQuery += (', (' + tourn.id + ', ' + matchNumber + ', 0, ')
-              sqlQuery += (schoolIds[remainingSchools[red]] + ', \'I\', ')
-              sqlQuery += (schoolIds[remainingSchools[green]] + ', \'I\')')
-              ++matchNumber
+          if (numSchools === 7) {
+            for (var i = 1; i < order.length; ++i) {
+              sqlQuery += (', (' + tourn.id + ', ' + '1' + i + '0' + ', 0, ')
+              sqlQuery += (schoolIds[order[i]] + ', \'I\')')
+              sqlQuery += (', (' + tourn.id + ', ' + '1' + i + '1' + ', 0, ')
+              sqlQuery += (schoolIds[order[i]] + ', \'I\')')
+              sqlQuery += (', (' + tourn.id + ', ' + '1' + i + '2' + ', 0, ')
+              sqlQuery += (schoolIds[order[i]] + ', \'I\')')
             }
 
-            var red = 0
-            var green = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
-
-            if (sqlQuery.endsWith (')')) {
-              sqlQuery += (', ')
-            }
-
-            sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
-            sqlQuery += (schoolIds[remainingSchools[red]] + ', \'I\', ')
-            sqlQuery += (schoolIds[remainingSchools[green]] + ', \'I\')')
-            ++matchNumber
+            sqlQuery += (', (' + tourn.id + ', ' + '210' + ', 0, ')
+            sqlQuery += (schoolIds[order[0]] + ', \'I\')')
+            sqlQuery += (', (' + tourn.id + ', ' + '211' + ', 0, ')
+            sqlQuery += (schoolIds[order[0]] + ', \'I\')')
+            sqlQuery += (', (' + tourn.id + ', ' + '212' + ', 0, ')
+            sqlQuery += (schoolIds[order[0]] + ', \'I\')')
           }
 
           console.log(sqlQuery);
