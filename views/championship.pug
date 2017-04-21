@@ -96,22 +96,31 @@ block content
           .w3-card-2.w3-hover-shadow
             .w3-container
               p
-                span= matches[matchId + 1].greenTeam
-                span.w3-right Avg: #{matches[matchId].greenScore}
+                span(style="font-weight:bold;")= matches[matchId + 1].greenTeam
+                if(matches[matchId].greenResult === 'A')
+                  span.w3-right Score: #{matches[matchId].greenScore}
+                else
+                  span.w3-right Score: --
             .w3-container.ybot-theme-secb
               p
-                span A: #{matches[matchId + 1].greenScore}
-                span.w3-right B: #{matches[matchId + 2].greenScore}
+                if(matches[matchId + 1].greenResult === 'S')
+                  span A: #{matches[matchId + 1].greenScore}
+                else
+                  span A: --
+                if(matches[matchId + 2].greenResult === 'S')
+                  span.w3-right B: #{matches[matchId + 2].greenScore}
+                else
+                  span.w3-right B: --
       else
         .w3-card.w3-opacity
           .w3-container
             p
               span Team
-              span.w3-right Avg: 0
+              span.w3-right Score: --
           .w3-container.ybot-theme-secb
             p
-              span A: 0
-              span.w3-right B: 0  
+              span A: --
+              span.w3-right B: -- 
                         
   h3(style="margin-top:24px;") Finals
   #finals.ybot-anchor
