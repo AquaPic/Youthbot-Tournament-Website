@@ -97,7 +97,7 @@ block content
             .w3-container
               p
                 span(style="font-weight:bold;")= matches[matchId + 1].greenTeam
-                if(matches[matchId].greenResult === 'A')
+                if(matches[matchId + 1].greenResult === 'S' && matches[matchId + 2].greenResult === 'S')
                   -var average = (matches[matchId + 1].greenScore + matches[matchId + 2].greenScore) / 2
                   span.w3-right Score: #{average} 
                 else
