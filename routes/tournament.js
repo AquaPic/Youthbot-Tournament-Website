@@ -11,7 +11,7 @@ var data = [
   {
     urlName: 'competition1',
     name: '1st Competition',
-    id: 2
+    id: 11
   },
   {
     urlName: 'competition2',
@@ -65,7 +65,7 @@ router.get('/', function(req, res, next) {
 
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else if ((tourn.id >= 2) && (tourn.id <= 5)) {
+  } else if ((tourn.id >= 2) && (tourn.id <= 11)) {
     db.get(
       function(err) {
         if (err)

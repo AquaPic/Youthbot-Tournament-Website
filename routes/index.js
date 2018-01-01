@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
         next(err)
       }
 
-      if(rows[0]) {
+      if(rows) {
         res.render('standings', {
           url: req.originalUrl,
           user: req.user,
