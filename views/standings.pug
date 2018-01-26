@@ -18,21 +18,27 @@ block content
           tr.ybot-theme-seca
             th Rank
             th Team
+            th Wins
+            th Ties
+            th Loses
             th Average Score
             th Highest Score
-            th Matches Played
           -for (var i=0; i<standings.length; i+=2) {
             tr
               td= i+1
               td= standings[i].team
+              td= standings[i].wins
+              td= standings[i].ties
+              td= standings[i].loses
               td= standings[i].score
               td= standings[i].highest
-              td= standings[i].matches_played
             if (standings[i+1])
               tr.ybot-theme-secb
                 td= i+2
                 td= standings[i+1].team
+                td= standings[i+1].wins
+                td= standings[i+1].ties
+                td= standings[i+1].loses
                 td= standings[i+1].score
                 td= standings[i+1].highest
-                td= standings[i+1].matches_played
           -}

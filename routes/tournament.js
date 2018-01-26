@@ -99,6 +99,14 @@ router.get('/', function(req, res, next) {
                   schools.push (row.red_team)
                 }
               }
+              
+              if (row.red_result.includes("I")) {
+                row.red_result = null
+              }
+              
+              if (row.green_result.includes("I")) {
+                row.green_result = null
+              } 
 
               matches[row.match_id] = {
                 greenTeam: row.green_team,
