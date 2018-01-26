@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
         next(err)
     }
   ).query(
-    'select * from standings_by_score;',
+    'select * from standings_by_wins;',
     function(err, rows) {
       if (err) {
         next(err)

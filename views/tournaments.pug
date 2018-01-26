@@ -10,24 +10,36 @@ block content
       if(matches[matchId])
         //a.ybot-no-decoration(href= matchString)
         .w3-card-2.w3-hover-shadow
-          .w3-container
-            p
-              span.w3-text-green= matches[matchId].greenTeam
-              span.w3-right= matches[matchId].greenScore
-          .w3-container.ybot-theme-secb
-            p
-              span.w3-text-red= matches[matchId].redTeam
-              span.w3-right= matches[matchId].redScore
+          .w3-row-padding
+            .w3-col(style='width: 70%;')
+              p.w3-text-green= matches[matchId].greenTeam
+            .w3-col(style='width: 20%;')
+              p= matches[matchId].greenScore
+            .w3-col(style='width: 10%;')
+              p= matches[matchId].greenResult
+          .w3-row-padding.ybot-theme-secb
+            .w3-col(style='width: 70%;')
+              p.w3-text-red= matches[matchId].redTeam
+            .w3-col(style='width: 20%;')
+              p= matches[matchId].redScore
+            .w3-col(style='width: 10%;')
+              p= matches[matchId].redResult
       else
         .w3-card.w3-opacity
-          .w3-container
-            p
-              span.w3-text-green.w3-left-align Green
-              span.w3-right 0
-          .w3-container.ybot-theme-secb
-            p
-              span.w3-text-red.w3-left-align Red
-              span.w3-right 0
+          .w3-row-padding
+            .w3-col(style='width: 70%;')
+              p.w3-text-green Green
+            .w3-col(style='width: 20%;')
+              p 0
+            .w3-col(style='width: 10%;')
+              p I
+          .w3-row-padding.ybot-theme-secb
+            .w3-col(style='width: 70%;')
+              p.w3-text-red Red
+            .w3-col(style='width: 20%;')
+              p 0
+            .w3-col(style='width: 10%;')
+              p I
 
   #matches.ybot-anchor
   -var maxRounds = 0
