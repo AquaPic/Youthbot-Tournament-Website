@@ -1,105 +1,146 @@
 extends layout
 
+mixin columns(intermatch, round)
+  -var matchId = matchesPerRound * (round - 1) + intermatch
+  -var matchString = '/' + tournamentName + '/' + matchId
+  .w3-col.l3
+    if(matches[matchId])
+      //-a.ybot-no-decoration(href= matchString)
+      .w3-card-2.w3-hover-shadow
+        .w3-row-padding
+          .w3-col(style='width: 70%;')
+            p.w3-text-green= matches[matchId].greenTeam
+          .w3-col(style='width: 20%;')
+            p= matches[matchId].greenScore
+          .w3-col(style='width: 10%;')
+            p= matches[matchId].greenResult
+        .w3-row-padding.ybot-theme-secb
+          .w3-col(style='width: 70%;')
+            p.w3-text-red= matches[matchId].redTeam
+          .w3-col(style='width: 20%;')
+            p= matches[matchId].redScore
+          .w3-col(style='width: 10%;')
+            p= matches[matchId].redResult
+    else
+      .w3-card.w3-opacity
+        .w3-row-padding
+          .w3-col(style='width: 70%;')
+            p.w3-text-green Green
+          .w3-col(style='width: 20%;')
+            p 0
+          .w3-col(style='width: 10%;')
+            p I
+        .w3-row-padding.ybot-theme-secb
+          .w3-col(style='width: 70%;')
+            p.w3-text-red Red
+          .w3-col(style='width: 20%;')
+            p 0
+          .w3-col(style='width: 10%;')
+            p I
+
 block content
   -var matchesPerRound = matches['matchesPerRound']
   -var roundCount = matches['roundCount']
-  mixin columns(intermatch, round)
-    -var matchId = matchesPerRound * (round - 1) + intermatch
-    -var matchString = '/' + tournamentName + '/' + matchId
-    .w3-col.l2
-      if(matches[matchId])
-        //a.ybot-no-decoration(href= matchString)
-        .w3-card-2.w3-hover-shadow
-          .w3-row-padding
-            .w3-col(style='width: 70%;')
-              p.w3-text-green= matches[matchId].greenTeam
-            .w3-col(style='width: 20%;')
-              p= matches[matchId].greenScore
-            .w3-col(style='width: 10%;')
-              p= matches[matchId].greenResult
-          .w3-row-padding.ybot-theme-secb
-            .w3-col(style='width: 70%;')
-              p.w3-text-red= matches[matchId].redTeam
-            .w3-col(style='width: 20%;')
-              p= matches[matchId].redScore
-            .w3-col(style='width: 10%;')
-              p= matches[matchId].redResult
-      else
-        .w3-card.w3-opacity
-          .w3-row-padding
-            .w3-col(style='width: 70%;')
-              p.w3-text-green Green
-            .w3-col(style='width: 20%;')
-              p 0
-            .w3-col(style='width: 10%;')
-              p I
-          .w3-row-padding.ybot-theme-secb
-            .w3-col(style='width: 70%;')
-              p.w3-text-red Red
-            .w3-col(style='width: 20%;')
-              p 0
-            .w3-col(style='width: 10%;')
-              p I
-
-  #matches.ybot-anchor
   -var maxRounds = 0
-  -if (roundCount >= 6) {
-  -  maxRounds = 6
-  -} else {
-  -  maxRounds = roundCount
-  -}
-
-  .w3-row.ybot-theme-seca.w3-center
-    -for (var i=1; i<=maxRounds; ++i) {
-      .w3-col.l2
-        h4 Round #{i}
-    -}
-
-  -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
-    .w3-row-padding(style="margin-top:12px;")
-      -for (var round=1; round<=maxRounds; ++round) {
-        +columns(intermatch, round)
-      -}
-  -}
-
-  if (roundCount > 6)
-    -if (roundCount >= 12) {
-    -  maxRounds = 12
+  
+  #matches.ybot-anchor
+  .w3-hide-small.w3-hide-medium
+    -if (roundCount >= 4) {
+    -  maxRounds = 4
     -} else {
     -  maxRounds = roundCount
     -}
 
-    .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
-      -for (var i=7; i<=maxRounds; ++i) {
-        .w3-col.l2
+    .w3-row.ybot-theme-seca.w3-center
+      -for (var i=1; i<=maxRounds; ++i) {
+        .w3-col.l3
           h4 Round #{i}
       -}
 
     -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
       .w3-row-padding(style="margin-top:12px;")
-        -for (var round=7; round<=maxRounds; ++round) {
+        -for (var round=1; round<=maxRounds; ++round) {
           +columns(intermatch, round)
         -}
     -}
 
-  if (roundCount > 12)
-    -if (roundCount >= 18) {
-    -  maxRounds = 18
-    -} else {
-    -  maxRounds = roundCount
-    -}
-
-    .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
-      -for (var i=13; i<=maxRounds; ++i) {
-        .w3-col.l2
-          h4 Round #{i}
+    if (roundCount > 4)
+      -if (roundCount >= 8) {
+      -  maxRounds = 8
+      -} else {
+      -  maxRounds = roundCount
       -}
 
-    -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
-      .w3-row-padding(style="margin-top:12px;")
-        -for (var round=13; round<=maxRounds; ++round) {
-          +columns(intermatch, round)
+      .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
+        -for (var i=5; i<=maxRounds; ++i) {
+          .w3-col.l3
+            h4 Round #{i}
         -}
+
+      -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+        .w3-row-padding(style="margin-top:12px;")
+          -for (var round=5; round<=maxRounds; ++round) {
+            +columns(intermatch, round)
+          -}
+      -}
+
+    if (roundCount > 8)
+      -if (roundCount >= 12) {
+      -  maxRounds = 12
+      -} else {
+      -  maxRounds = roundCount
+      -}
+
+      .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
+        -for (var i=9; i<=maxRounds; ++i) {
+          .w3-col.l3
+            h4 Round #{i}
+        -}
+
+      -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+        .w3-row-padding(style="margin-top:12px;")
+          -for (var round=9; round<=maxRounds; ++round) {
+            +columns(intermatch, round)
+          -}
+      -}
+
+    if (roundCount > 12)
+      -if (roundCount >= 16) {
+      -  maxRounds = 16
+      -} else {
+      -  maxRounds = roundCount
+      -}
+
+      .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;")
+        -for (var i=13; i<=maxRounds; ++i) {
+          .w3-col.l3
+            h4 Round #{i}
+        -}
+
+      -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+        .w3-row-padding(style="margin-top:12px;")
+          -for (var round=13; round<=maxRounds; ++round) {
+            +columns(intermatch, round)
+          -}
+      -}
+
+  #matches_small_medium.ybot-anchor
+  .w3-hide-large
+    -for(var rounds=1; rounds<=roundCount; ++rounds) {
+      -if (rounds === 1) {
+        .w3-row.ybot-theme-seca.w3-center
+          .w3-col
+            h4 Round #{rounds}
+      -} else {
+        .w3-row.ybot-theme-seca.w3-center(style="margin-top:12px;") 
+          .w3-col
+            h4 Round #{rounds}
+      -}
+      
+      -for (var intermatch=1; intermatch<=matchesPerRound; ++intermatch) {
+        .w3-row-padding(style="margin-top:12px;")
+          +columns(intermatch, rounds)
+      -}
     -}
 
   if (user)

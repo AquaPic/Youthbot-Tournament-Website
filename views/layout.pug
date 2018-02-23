@@ -12,9 +12,9 @@ html
 
   body
     -var active = ''
-    -var baseurl =''
+    -var baseurl = ''
 
-    #side_nav.w3-top.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb(style='display: none;')
+    #side_nav.w3-top.w3-sidenav.w3-card-4.w3-animate-left.ybot-theme-secb.w3-hide-small.w3-hide-medium(style='display: none;')
       .w3-container.w3-padding-0
         ul.w3-navbar.ybot-theme-pri
           li
@@ -25,6 +25,8 @@ html
           li.w3-right
             a.w3-large(href='javascript:void(0)', onclick='sidebar_close()') x
 
+      a(href='/') Standings
+
       mixin tournLinks(name, display)
         if (url.includes(name))
           -active = display
@@ -34,12 +36,24 @@ html
           a(href='/' + name)= display
 
       +tournLinks('competition1', '1st Competition')
-      //+tournLinks('competition2', '2nd Competition')
-      //+tournLinks('competition3', '3rd Competition')
-      //+tournLinks('championship', 'Championship')
-      //+tournLinks('field-testing', 'Field Testing')
+      +tournLinks('competition2', '2nd Competition')
+      //-+tournLinks('competition3', '3rd Competition')
+      //-+tournLinks('championship', 'Championship')
+      //-+tournLinks('field-testing', 'Field Testing')
 
-    #header.w3-top
+    #top_nav.w3-top.ybot-theme-secb.w3-hide-large(style='display: none;')
+      ul.w3-navbar(style="margin-top:40px;")
+        li.w3-col
+          a(href='javascript:void(0)', onclick='topbar_close()') x
+        li.w3-col
+          a(href='/') Standings
+        li.w3-col
+          +tournLinks('competition1', '1st Competition')
+        li.w3-col
+          +tournLinks('competition2', '2nd Competition')
+
+    // Header for large screens
+    #header.w3-top.w3-hide-small.w3-hide-medium
       ul.w3-navbar.ybot-theme-pri
         li
           a.w3-large(href='javascript:void(0)' onclick='sidebar_open()') ☰
@@ -55,6 +69,12 @@ html
             a.w3-large(href='#')= user.username
           else
             a.w3-large(href='/login') Login
+
+    // Header for small and medium screen
+    #header.w3-top.w3-hide-large
+      ul.w3-navbar.ybot-theme-pri
+        li
+          a.w3-large(href='javascript:void(0)' onclick='topbar_open()') ☰
 
     #main.w3-container(style='margin-top:53px; margin-left:40px; margin-right:40px; margin-bottom: 40px')
       block content

@@ -16,7 +16,7 @@ var data = [
   {
     urlName: 'competition2',
     name: '2nd Competition',
-    id: 3
+    id: 12
   },
   {
     urlName: 'competition3',
@@ -65,7 +65,7 @@ router.get('/', function(req, res, next) {
 
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else if ((tourn.id >= 2) && (tourn.id <= 11)) {
+  } else if ((tourn.id >= 2) && (tourn.id <= 12)) {
     db.get(
       function(err) {
         if (err)
@@ -134,6 +134,9 @@ router.get('/', function(req, res, next) {
             var schoolsParticipating = schools.length
             matches['matchesPerRound'] = schoolsParticipating / 2
             matches['roundCount'] = schoolsParticipating - 1
+            if (tourn.id === 12) {              
+              matches['roundCount'] = matches['roundCount'] * 2
+            }
 
             res.render('tournaments', {
               url: req.originalUrl,
@@ -570,6 +573,36 @@ router.post('/', function(req, res, next) {
             sqlQuery += (schoolIds[schools[red]] + ', \'I\', ')
             sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
             ++matchNumber
+          }
+
+          if (tourn.id === 12) {
+            for (var round = 0; round < roundCount; ++round) {
+              for (var intermatch = 0; intermatch < matchesPerRound - 1; ++intermatch) {
+                var green = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
+                var red = indexLimiter(green + (intermatch * 2) + 1, schoolsParticipating)
+
+                if (sqlQuery.endsWith (')')) {
+                  sqlQuery += (', ')
+                }
+
+                sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+                sqlQuery += (schoolIds[schools[red]] + ', \'I\', ')
+                sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
+                ++matchNumber
+              }
+
+              var red = 0
+              var green = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
+
+              if (sqlQuery.endsWith (')')) {
+                sqlQuery += (', ')
+              }
+
+              sqlQuery += ('(' + tourn.id + ', ' + matchNumber + ', 0, ')
+              sqlQuery += (schoolIds[schools[red]] + ', \'I\', ')
+              sqlQuery += (schoolIds[schools[green]] + ', \'I\')')
+              ++matchNumber
+            }
           }
 
           db.get(

@@ -3,11 +3,11 @@ extends layout
 block links
   li
     a.w3-large(href='/competition1') 1st Competition
-  //li
+  li
     a.w3-large(href='/competition2') 2nd Competition
-  //li
+  //-li
     a.w3-large(href='/competition3') 3rd Competition
-  //li
+  //-li
     a.w3-large(href='/championship') Championship
 
 block content
@@ -18,27 +18,27 @@ block content
           tr.ybot-theme-seca
             th Rank
             th Team
-            th Wins
-            th Ties
-            th Loses
-            th Average Score
-            th Highest Score
+            th.w3-hide-small.w3-hide-medium Wins
+            th.w3-hide-small.w3-hide-medium Ties
+            th.w3-hide-small.w3-hide-medium Loses
+            th.w3-hide-small.w3-hide-medium Average Score
+            th.w3-hide-small.w3-hide-medium Highest Score
           -for (var i=0; i<standings.length; i+=2) {
             tr
               td= i+1
               td= standings[i].team
-              td= standings[i].wins
-              td= standings[i].ties
-              td= standings[i].loses
-              td= standings[i].score
-              td= standings[i].highest
+              td.w3-hide-small.w3-hide-medium= standings[i].wins
+              td.w3-hide-small.w3-hide-medium= standings[i].ties
+              td.w3-hide-small.w3-hide-medium= standings[i].loses
+              td.w3-hide-small.w3-hide-medium= standings[i].score
+              td.w3-hide-small.w3-hide-medium= standings[i].highest
             if (standings[i+1])
               tr.ybot-theme-secb
                 td= i+2
                 td= standings[i+1].team
-                td= standings[i+1].wins
-                td= standings[i+1].ties
-                td= standings[i+1].loses
-                td= standings[i+1].score
-                td= standings[i+1].highest
+                td.w3-hide-small.w3-hide-medium= standings[i+1].wins
+                td.w3-hide-small.w3-hide-medium= standings[i+1].ties
+                td.w3-hide-small.w3-hide-medium= standings[i+1].loses
+                td.w3-hide-small.w3-hide-medium= standings[i+1].score
+                td.w3-hide-small.w3-hide-medium= standings[i+1].highest
           -}

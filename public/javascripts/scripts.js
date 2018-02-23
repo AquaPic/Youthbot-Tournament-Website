@@ -13,6 +13,19 @@ function sidebar_close() {
   document.getElementById('side_nav').style.display = 'none';
 }
 
+function topbar_open() {
+  document.getElementById('main').style.marginTop = '205px';
+  document.getElementById('header').style.zIndex = 'auto';
+  document.getElementById('top_nav').style.height = '195px';
+  document.getElementById('top_nav').style.display = 'block';
+}
+
+function topbar_close() {
+  document.getElementById('main').style.marginTop = '53px';
+  document.getElementById('header').style.zIndex = '1';
+  document.getElementById('top_nav').style.display = 'none';
+}
+
 function show_add_team() {
   document.getElementById('addTeam').style.display = 'block';
   document.getElementById('addSchool').style.display = 'none';
