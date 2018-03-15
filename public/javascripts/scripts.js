@@ -14,9 +14,9 @@ function sidebar_close() {
 }
 
 function topbar_open() {
-  document.getElementById('main').style.marginTop = '205px';
+  document.getElementById('main').style.marginTop = '245px';
   document.getElementById('header').style.zIndex = 'auto';
-  document.getElementById('top_nav').style.height = '195px';
+  document.getElementById('top_nav').style.height = '235px';
   document.getElementById('top_nav').style.display = 'block';
 }
 

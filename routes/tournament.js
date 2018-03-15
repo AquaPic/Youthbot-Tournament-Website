@@ -21,7 +21,7 @@ var data = [
   {
     urlName: 'competition3',
     name: '3rd Competition',
-    id: 4
+    id: 13
   },
   {
     urlName: 'championship',
@@ -65,7 +65,7 @@ router.get('/', function(req, res, next) {
 
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else if ((tourn.id >= 2) && (tourn.id <= 12)) {
+  } else if ((tourn.id >= 2) && (tourn.id <= 13)) {
     db.get(
       function(err) {
         if (err)
@@ -134,7 +134,8 @@ router.get('/', function(req, res, next) {
             var schoolsParticipating = schools.length
             matches['matchesPerRound'] = schoolsParticipating / 2
             matches['roundCount'] = schoolsParticipating - 1
-            if (tourn.id === 12) {              
+            
+            if ((tourn.id >= 12) && (tourn.id <= 13)) {              
               matches['roundCount'] = matches['roundCount'] * 2
             }
 
@@ -575,11 +576,11 @@ router.post('/', function(req, res, next) {
             ++matchNumber
           }
 
-          if (tourn.id === 12) {
+          if ((tourn.id >= 12) && (tourn.id <= 13)) {
             for (var round = 0; round < roundCount; ++round) {
               for (var intermatch = 0; intermatch < matchesPerRound - 1; ++intermatch) {
-                var green = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
-                var red = indexLimiter(green + (intermatch * 2) + 1, schoolsParticipating)
+                var red = indexLimiter(schoolsParticipating / 2 + round - 1 - intermatch, schoolsParticipating)
+                var green = indexLimiter(red + (intermatch * 2) + 1, schoolsParticipating)
 
                 if (sqlQuery.endsWith (')')) {
                   sqlQuery += (', ')
@@ -591,8 +592,8 @@ router.post('/', function(req, res, next) {
                 ++matchNumber
               }
 
-              var red = 0
-              var green = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
+              var green = 0
+              var red = indexLimiter(schoolsParticipating - 1 + round, schoolsParticipating)
 
               if (sqlQuery.endsWith (')')) {
                 sqlQuery += (', ')
