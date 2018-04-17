@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var db = require('../db')
+var _ = require('lodash')
 
 var data = [
   {
@@ -26,7 +27,7 @@ var data = [
   {
     urlName: 'championship',
     name: 'Championship',
-    id: 5
+    id: 14
   },
   {
     urlName: 'field-testing',
@@ -65,7 +66,7 @@ router.get('/', function(req, res, next) {
 
   if (tourn.id === 6) {
     res.redirect('/field-testing/0')
-  } else if ((tourn.id >= 2) && (tourn.id <= 13)) {
+  } else if ((tourn.id >= 2) && (tourn.id <= 14)) {
     db.get(
       function(err) {
         if (err)
@@ -88,23 +89,23 @@ router.get('/', function(req, res, next) {
 
           for (var row of rows) {
             if (row.match_id !== 0) { // hack to prevent display issues if match 0 is accidently scored
-              if (!schools.includes(row.green_team)) {
+              if (_.includes(schools, row.green_team)) {
                 if (row.green_team != null) {
                   schools.push (row.green_team)
                 }
               }
 
-              if (!schools.includes(row.red_team)) {
+              if (!_.includes(schools, row.red_team)) {
                 if (row.red_team != null) {
                   schools.push (row.red_team)
                 }
               }
               
-              if (row.red_result.includes("I")) {
+              if (_.includes(row.red_result, "I")) {
                 row.red_result = null
               }
               
-              if (row.green_result.includes("I")) {
+              if (_.includes(row.green_result, "I")) {
                 row.green_result = null
               } 
 
@@ -121,10 +122,20 @@ router.get('/', function(req, res, next) {
             }
           }
 
-          if (tourn.id === 5) {
+          if (tourn.id === 5) { // 2017 Championship
             matches['numSchools'] = schools.length
 
             res.render('championship', {
+              url: req.originalUrl,
+              user: req.user,
+              tournamentName: tourn.urlName,
+              matches: matches
+            })
+          } else if  (tourn.id === 14) { // 2018 Championship
+            matches['matchesPerRound'] = 3
+            matches['roundCount'] = 6
+
+            res.render('championship2018', {
               url: req.originalUrl,
               user: req.user,
               tournamentName: tourn.urlName,
