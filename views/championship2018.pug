@@ -4,8 +4,6 @@ block links
   li
     a.w3-large(href='#matches') Rounds
   li
-    a.w3-large(href='#seeding') Seeding
-  li
     a.w3-large(href='#elimination') Elimination
 
 mixin columns(intermatch, round)
@@ -150,12 +148,184 @@ block content
       -}
     -}
 
-  h3(style="margin-top:24px;") Seeding
-  #seeding.ybot-anchor
-
-  h3(style="margin-top:24px;") Elimination
   #elimination.ybot-anchor
+  h3(style="margin-top:24px;") Elimination
+  
+  mixin match(match, green, red)
+    -var matchId =  100 + match
+    -var matchString = '/' + tournamentName + '/' + matchId
+    .w3-col
+      if(matches[matchId])
+        .w3-card-2.w3-hover-shadow
+          .w3-row-padding
+            .w3-col(style='width: 10%;')
+              p= match
+            .w3-col(style='width: 60%;')
+              p.w3-text-green= matches[matchId].greenTeam
+            .w3-col(style='width: 20%;')
+              p= matches[matchId].greenScore
+            .w3-col(style='width: 10%;')
+              p= matches[matchId].greenResult
+          .w3-row-padding.ybot-theme-secb
+            .w3-col(style='width: 10%;')
+              p
+            .w3-col(style='width: 60%;')
+              p.w3-text-red= matches[matchId].redTeam
+            .w3-col(style='width: 20%;')
+              p= matches[matchId].redScore
+            .w3-col(style='width: 10%;')
+              p= matches[matchId].redResult
+      else
+        .w3-card.w3-opacity
+          .w3-row-padding
+            .w3-col(style='width: 10%;')
+              p= match
+            .w3-col(style='width: 60%;')
+              p.w3-text-green= green
+            .w3-col(style='width: 20%;')
+              p 
+            .w3-col(style='width: 10%;')
+              p 
+          .w3-row-padding.ybot-theme-secb
+            .w3-col(style='width: 10%;')
+              p
+            .w3-col(style='width: 60%;')
+              p.w3-text-red= red
+            .w3-col(style='width: 20%;')
+              p 
+            .w3-col(style='width: 10%;')
+              p 
 
+  .w3-hide-small.w3-hide-medium
+    .w3-row(style="margin-left: 12px; margin-right: 12px;")
+      .w3-col.l3
+        .w3-row
+          .w3-col(style='width: 80%;')
+            .w3-row(style="margin-top:35px;")
+              +match(1, "Seed 4", "Seed 5")
+            .w3-row(style="margin-top:12px;")
+              +match(2, "Seed 2", "Seed 7")
+            .w3-row(style="margin-top:12px;")
+              +match(3, "Seed 3", "Seed 6")
+          .w3-rest
+            .w3-row
+              .w3-col.w3-half
+                div(style="margin-top:82px;")
+                div(style="border-top-style: solid;")
+                div(style="margin-top:81px;")
+                div(style="border-right-style: solid; height:23px")
+                div(style="border-top-style: solid; border-right-style: solid; border-bottom-style: solid; height:110px")
+              .w3-col.w3-half
+                div(style="margin-top:82px;")
+                div(style="border-top-style: solid;")
+                div(style="margin-top:81px;")
+                div(style="border-top-style: solid;")
+        .w3-row
+          .w3-col(style='width: 20%;')
+            .w3-row(style="margin-top:12px;")
+          .w3-rest
+            .w3-row(style="margin-top:12px;")
+              +match(6, "Loser 2", "Loser 3")
+
+      .w3-col.l3
+        .w3-row
+          .w3-col(style='width: 80%;')
+            .w3-row(style="margin-top:12px;")
+              +match(4, "Seed 1", "Winner 1")
+            .w3-row(style="margin-top:12px;")
+              +match(5, "Winner 2", "Winner 3")
+          .w3-rest
+            .w3-row
+              .w3-col.w3-half
+                div(style="margin-top:57px;")
+                div(style="border-top-style: solid; border-right-style: solid; border-bottom-style: solid; height:111px")
+              .w3-col.w3-half
+                div(style="margin-top:165px;")
+                div(style="border-top-style: solid;")
+        .w3-row
+          .w3-col(style='width: 20%;')
+            .w3-col.w3-half
+              div(style="margin-top:189px;")
+              div(style="border-top-style: solid;")
+            .w3-col.w3-half
+              div(style="margin-top:189px;")
+              div(style="border-top-style: solid;")
+          .w3-rest
+            .w3-row(style="margin-top:119px;")
+              +match(7, "Loser 4", "Winner 6")
+            .w3-row(style="margin-top:12px;")
+              +match(8, "Loser 1", "Loser 5")
+          
+      .w3-col.l3
+        .w3-row
+          .w3-col(style='width: 80%;')
+            .w3-row(style="margin-top:118px;")
+              +match(9, "Winner 4", "Winner 5")
+          .w3-rest
+            .w3-row
+              div(style="margin-top:165px;")
+              div(style="border-top-style: solid;")
+        .w3-row
+          .w3-col(style='width: 20%;')
+            .w3-col.w3-half
+              div(style="margin-top:166px;")
+              div(style="border-top-style: solid; border-right-style: solid; border-bottom-style: solid; height:111px")
+            .w3-col.w3-half
+              div(style="margin-top:166px;")
+              div(style="border-top-style: solid;")
+          .w3-rest
+            .w3-row(style="margin-top:119px;")
+              +match(10, "Winner 7", "Winner 8")
+
+      .w3-col.l3
+        .w3-row
+          .w3-col(style='width: 20%;')
+            .w3-row
+              div(style="margin-top:165px;")
+              div(style="border-top-style: solid;")
+          .w3-rest
+            .w3-row(style="margin-top:118px;")
+              +match(12, "Winner 9", "Winner 11")
+            .w3-row(style="margin-top:12px;")
+              +match(13, "Winner 12", "Loser 12")
+        .w3-row
+          .w3-col(style='width: 10%;')
+            .w3-row
+              div(style="margin-top:59px;")
+              div(style="border-top-style: solid;")
+          .w3-col(style='width: 80%;')
+            .w3-row(style="margin-top:12px;")
+              +match(11, "Loser 9", "Winner 10")
+          .w3-rest
+            .w3-row(style="margin-top:12px;")
+
+  .w3-hide-large
+    .w3-row(style="margin-top:12px;")
+      +match(1, "Seed 4", "Seed 5")
+    .w3-row(style="margin-top:12px;")
+      +match(2, "Seed 2", "Seed 7")
+    .w3-row(style="margin-top:12px;")
+      +match(3, "Seed 3", "Seed 6")
+    .w3-row(style="margin-top:12px;")
+      +match(4, "Seed 1", "Winner 1")
+    .w3-row(style="margin-top:12px;")
+      +match(5, "Winner 2", "Winner 3")
+    .w3-row(style="margin-top:12px;")
+      +match(6, "Loser 2", "Loser 3")
+    .w3-row(style="margin-top:12px;")
+      +match(7, "Loser 4", "Winner 6")
+    .w3-row(style="margin-top:12px;")
+      +match(8, "Loser 1", "Loser 5")
+    .w3-row(style="margin-top:12px;")
+      +match(9, "Winner 4", "Winner 5")
+    .w3-row(style="margin-top:12px;")
+      +match(10, "Winner 7", "Winner 8")
+    .w3-row(style="margin-top:12px;")
+      +match(11, "Loser 9", "Winner 10")
+    .w3-row(style="margin-top:12px;")
+      +match(12, "Winner 9", "Winner 11")
+    .w3-row(style="margin-top:12px;")
+      +match(13, "Winner 12", "Loser 12")
 
   if (user)
     div(style="margin-top:12px; margin-left:12px")

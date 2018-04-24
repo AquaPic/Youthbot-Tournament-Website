@@ -89,10 +89,18 @@ router.get('/', function(req, res, next) {
 
           for (var row of rows) {
             if (row.match_id !== 0) { // hack to prevent display issues if match 0 is accidently scored
-              if (_.includes(schools, row.green_team)) {
+              if (row.green_team === "Anderson Prep Academy") {
+                row.green_team = "APA"
+              }
+
+              if (!_.includes(schools, row.green_team)) {
                 if (row.green_team != null) {
                   schools.push (row.green_team)
                 }
+              }
+
+              if (row.red_team === "Anderson Prep Academy") {
+                row.red_team = "APA"
               }
 
               if (!_.includes(schools, row.red_team)) {
